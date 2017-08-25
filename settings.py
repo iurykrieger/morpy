@@ -1,3 +1,4 @@
+# settings.py
 import os
 
 DEBUG = os.environ.get('DEBUG', True)
