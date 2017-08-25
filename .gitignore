@@ -53,3 +53,6 @@ fabric.properties
 
 # dump files
 *.rdb
+
+# log files
+*.log
