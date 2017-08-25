@@ -34,6 +34,10 @@ def train():
     return {"message": "Success!", "success": 1}
 
 
+@app.route('/')
+def root():
+    return 'Olá visitante \,,/'
+
 if __name__ == '__main__':
     app.debug = True
     app.run()
