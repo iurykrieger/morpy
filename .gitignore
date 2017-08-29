@@ -56,3 +56,6 @@ fabric.properties
 
 # log files
 *.log
+
+# vscode folder
+.vscode
