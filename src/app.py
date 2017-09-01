@@ -2,10 +2,11 @@ from flask.ext.api import FlaskAPI
 from flask import request, current_app, abort
 from common.auth import middleware_auth_token
 from routes import ROUTES
+from flask_pymongo import PyMongo
 
 app = FlaskAPI(__name__)
-app.config.from_object('src.settings')
-
+app.config.from_pyfile('../settings.py')
+mongo = PyMongo(app)
 
 @app.route(ROUTES['predict']['endpoint'], methods=ROUTES['predict']['methods'])
 @middleware_auth_token
@@ -30,3 +31,46 @@ def train():
 @app.route(ROUTES['root']['endpoint'], methods=ROUTES['root']['methods'])
 def root():
     return ROUTES
+
+
+@app.route('/user', methods=['GET'])
+def get_all_users():
+    user = mongo.db.user
+
+    output = []
+
+    for u in user.find():
+        output.append({'name': u['name'], 'sex': u['sex'], 'age': u['age']})
+
+    return jsonify({'result': output})
+
+
+@app.route('/user/<name>', methods=['GET'])
+def get_user_by_bame(name):
+    user = mongo.db.user
+
+    u = user.find_one({'name': name})
+
+    if u:
+        output = {'name': u['name'], 'sex': u['sex'], 'age': u['age']}
+    else:
+        output = 'No results found'
+
+    return jsonify({'result': output})
+
+
+@app.route('/user', methods=['POST'])
+def add_framework():
+    user = mongo.db.user
+
+    name = request.json['name']
+    sex = request.json['sex']
+    age = request.json['age']
+
+    user_id = user.insert({'name': name, 'sex': sex, 'age': age})
+    new_user = user.find_one({'_id': user_id})
+
+    output = {'name': new_user['name'], 'sex': new_user['sex'], 'age': new_user['age']}
+
+    return jsonify({'result': output})
+
