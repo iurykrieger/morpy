@@ -3,10 +3,14 @@ from flask import request, current_app, abort, jsonify
 from common.auth import middleware_auth_token
 from routes import ROUTES
 from flask_pymongo import PyMongo
+from common import mongo
 
 app = FlaskAPI(__name__)
 app.config.from_pyfile('../settings.py')
 mongo = PyMongo(app)
+from mongokit import Connection
+
+connection = Connection()
 
 @app.route(ROUTES['predict']['endpoint'], methods=ROUTES['predict']['methods'])
 @middleware_auth_token
@@ -72,3 +76,15 @@ def add_framework():
 
     return jsonify({'result': output})
 
+@app.route('/token', methods=['GET'])
+def token():
+    users = mongo.get_db().users
+
+    user_id = users.insert({'name': 'Eloisa Renata Schons', 'sex': 'F', 'age': 18})
+
+    output = []
+    all_users = users.find()
+    for user in all_users:
+        output.append({'nome' : user['name'], 'sexo' : user['sex'], 'idade': user['age']})
+
+    return {'usuarios': output}

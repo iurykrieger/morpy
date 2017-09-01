@@ -3,3 +3,4 @@ gunicorn==19.1.1
 wsgiref==0.1.2
 python-dotenv==0.6.5
 Flask-PyMongo==0.5.1
+mongokit==0.9.1.1
