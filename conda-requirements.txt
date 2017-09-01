@@ -11,3 +11,4 @@ scipy=0.17.1=np111py27_nomkl_0
 setuptools=20.7.0=py27_0
 six=1.9.0=py27_0
 wheel=0.29.0=py27_0
+pymongo=3.4.0=py27_0
