@@ -1,5 +1,5 @@
 from flask.ext.api import FlaskAPI
-from flask import request, current_app, abort
+from flask import request, current_app, abort, jsonify
 from common.auth import middleware_auth_token
 from routes import ROUTES
 from flask_pymongo import PyMongo
@@ -33,16 +33,18 @@ def root():
     return ROUTES
 
 
-@app.route('/user', methods=['GET'])
+@app.route('/users', methods=['GET'])
 def get_all_users():
-    user = mongo.db.user
+    users = mongo.db.user
+
+    user_id = users.insert({'name': 'Eloisa Renata Schons', 'sex': 'F', 'age': 18})
 
     output = []
+    all_users = users.find()
+    for user in all_users:
+        output.append({'nome' : user['name'], 'sexo' : user['sex'], 'idade': user['age']})
 
-    for u in user.find():
-        output.append({'name': u['name'], 'sex': u['sex'], 'age': u['age']})
-
-    return jsonify({'result': output})
+    return {'usuarios': output}
 
 
 @app.route('/user/<name>', methods=['GET'])
@@ -61,13 +63,9 @@ def get_user_by_bame(name):
 
 @app.route('/user', methods=['POST'])
 def add_framework():
-    user = mongo.db.user
+    users = mongo.db.users
 
-    name = request.json['name']
-    sex = request.json['sex']
-    age = request.json['age']
-
-    user_id = user.insert({'name': name, 'sex': sex, 'age': age})
+    user_id = users.insert({'name': 'Eloisa Renata Schons', 'sex': 'F', 'age': 18})
     new_user = user.find_one({'_id': user_id})
 
     output = {'name': new_user['name'], 'sex': new_user['sex'], 'age': new_user['age']}

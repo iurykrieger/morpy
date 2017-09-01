@@ -7,10 +7,13 @@ from dotenv import load_dotenv
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
-DEBUG = os.environ.get('DEBUG')
+DEBUG = os.environ.get('DEBUG', True)
 SECRET_KEY = os.environ.get('SECRET_KEY')
 API_TOKEN = os.environ.get('API_TOKEN')
 REDIS_URL = os.environ.get('REDIS_URL')
-MONGO_URI = os.environ.get('MONGO_URI')
+
+#Mongo envroinment configuration
 MONGO_DBNAME = os.environ.get('MONGO_DBNAME')
-MONGO_URI = os.environ.get('MONGO_URI')
+MONGO_USERNAME = os.environ.get('MONGO_USERNAME')
+MONGO_PASSWORD = os.environ.get('MONGO_PASSWORD')
+MONGO_PORT = os.environ.get('MONGO_PORT', 27017)
