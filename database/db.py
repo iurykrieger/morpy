@@ -21,4 +21,5 @@ class ObjectIDConverter(BaseConverter):
 
 MONGO_URI = 'mongodb://%s:%s@%s:%s/%s' % (
     MONGO_USERNAME, MONGO_PASSWORD, MONGO_HOST, MONGO_PORT, MONGO_DBNAME)
-mongo_client = MongoClient(MONGO_URI)
+client = MongoClient(MONGO_URI)
+db = client[MONGO_DBNAME]

@@ -1,8 +1,11 @@
 from flask_api import FlaskAPI
 from flask import request, jsonify, abort
 from common.auth import Auth
-from database.db import ObjectIDConverter, mongo_client
+from common.exceptions import StatusCodeException
+from database.db import ObjectIDConverter, db
 from routes import ROUTES
+
+from users.models import User
 
 
 # Global defines
@@ -34,29 +37,23 @@ def train():
 
 @app.route('/users', methods=['POST'])
 def add_user():
-    email = request.data.get('email', None)
-    name = request.data.get('name', None)
-    age = request.data.get('age', None)
-    password = request.data.get('password', None)
-    if email and name and age and password:
-        users = mongo_client.db.users
-        user = users.find_one({'email': email, 'password': password})
-        if not user:
-            user_id = users.insert(
-                {'email': email, 'name': name, 'age': age, 'password': password})
-            user = users.find_one(user_id)
-            return {'id': ObjectIDConverter.to_url(user['_id']), 'email': user['email'], 'name': user['name'], 'age': user['age']}
-        else:
-            abort(409)
-    else:
-        abort(400)
+    try:
+        user = User(request.get_json())
+        return user.save()
+    except StatusCodeException as ex:
+        abort(ex.status_code)
 
 
 @app.route('/users/<objectid:user_id>', methods=['GET'])
 def get_user(user_id):
-    users = mongo_client.db.users
+    users = db.users
     user = users.find_one({'_id': user_id})
-    return {'id': ObjectIDConverter.to_url(user['_id']), 'email': user['email'], 'name': user['name'], 'age': user['age']}
+    return {
+        '_id': ObjectIDConverter.to_url(user['_id']),
+        'email': user['email'],
+        'name': user['name'],
+        'age': user['age']
+    }
 
 
 @app.route('/token', methods=['POST'])
@@ -81,15 +78,16 @@ def root():
 @app.route('/users', methods=['GET'])
 @auth.middleware_auth_token
 def get_all_users():
-    users = mongo_client.db.users
-
-    user_id = users.insert(
-        {'name': 'Eloisa Renata Schons', 'sex': 'F', 'age': 18})
+    users = db.users
 
     output = []
-    all_users = users.find()
+    all_users = users.find({'email': {'$exists': True}})
     for user in all_users:
-        output.append(
-            {'nome': user['name'], 'sexo': user['sex'], 'idade': user['age']})
+        output.append({
+            '_id': ObjectIDConverter.to_url(user['_id']),
+            'email': user['email'] or '',
+            'name': user['name'],
+            'age': user['age']
+        })
 
     return {'users': output}

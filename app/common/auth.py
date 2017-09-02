@@ -2,12 +2,12 @@ from functools import wraps
 from flask import request, abort
 from itsdangerous import (
     TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
-from database.db import mongo_client
+from database.db import db
 
 class Auth(object):
 
     def __init__(self, secret_key):
-        self.users = mongo_client.db.users
+        self.users = db.users
         self.secret_key = secret_key
 
     def generate_token(self, email, password, expiration=1296000):  # 15 days token
@@ -25,7 +25,7 @@ class Auth(object):
             return None
 
     def authenticate(self, token):
-        user = self.users.find_one({'token': token})
+        user = self.users.find_one({'auth.token': token})
         if user:
             try:
                 serializer = Serializer(self.secret_key)
