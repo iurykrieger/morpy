@@ -1,19 +1,18 @@
 from flask.ext.api import FlaskAPI
 from flask import request, current_app, abort, jsonify
-from common.auth import middleware_auth_token
+from common.auth import Auth
 from routes import ROUTES
 from flask_pymongo import PyMongo
 from common import mongo
 
 app = FlaskAPI(__name__)
 app.config.from_pyfile('../settings.py')
-mongo = PyMongo(app)
-from mongokit import Connection
+PyMongo(app)
 
-connection = Connection()
+auth = Auth(app.config['SECRET_KEY'])
 
 @app.route(ROUTES['predict']['endpoint'], methods=ROUTES['predict']['methods'])
-@middleware_auth_token
+@auth.middleware_auth_token
 def predict():
     from engines import content_engine
     item = request.data.get('item')
@@ -24,7 +23,7 @@ def predict():
 
 
 @app.route(ROUTES['train']['endpoint'], methods=ROUTES['train']['methods'])
-@middleware_auth_token
+@auth.middleware_auth_token
 def train():
     from engines import content_engine
     data_url = request.data.get('data-url', None)
@@ -38,7 +37,10 @@ def root():
 
 
 @app.route('/users', methods=['GET'])
+@auth.middleware_auth_token
 def get_all_users():
+    from pymongo import MongoClient
+    mongo = MongoClient()
     users = mongo.db.user
 
     user_id = users.insert({'name': 'Eloisa Renata Schons', 'sex': 'F', 'age': 18})
@@ -78,13 +80,13 @@ def add_framework():
 
 @app.route('/token', methods=['GET'])
 def token():
-    users = mongo.get_db().users
+    from pymongo import MongoClient
+    auth = Auth(app.config['SECRET_KEY'])
+    users = MongoClient().db.users
 
-    user_id = users.insert({'name': 'Eloisa Renata Schons', 'sex': 'F', 'age': 18})
+    user_id = users.insert({'name': 'Eloisa Renata Schons', 'email': 'eloisaschns@gmail.com', 'sex': 'F', 'age': 18})
+    new_user = users.find_one({'_id' : user_id})
 
-    output = []
-    all_users = users.find()
-    for user in all_users:
-        output.append({'nome' : user['name'], 'sexo' : user['sex'], 'idade': user['age']})
+    token = auth.generate_token(new_user)
 
-    return {'usuarios': output}
+    return {'token': token}
