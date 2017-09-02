@@ -1,8 +1,7 @@
 from flask_api import FlaskAPI
 from flask import request, jsonify, abort
-from flask_pymongo import PyMongo
 from common.auth import Auth
-from common.mongo import ObjectIDConverter
+from database.db import ObjectIDConverter, mongo_client
 from routes import ROUTES
 
 
@@ -11,7 +10,6 @@ app = FlaskAPI(__name__)
 app.config.from_pyfile('../settings.py')
 app.url_map.converters['objectid'] = ObjectIDConverter
 auth = Auth(app.config['SECRET_KEY'])
-PyMongo(app)
 
 
 @app.route(ROUTES['predict']['endpoint'], methods=ROUTES['predict']['methods'])
@@ -41,14 +39,13 @@ def add_user():
     age = request.data.get('age', None)
     password = request.data.get('password', None)
     if email and name and age and password:
-        from pymongo import MongoClient
-        users = MongoClient().db.users
+        users = mongo_client.db.users
         user = users.find_one({'email': email, 'password': password})
         if not user:
             user_id = users.insert(
                 {'email': email, 'name': name, 'age': age, 'password': password})
             user = users.find_one(user_id)
-            return {'_id': '%r' % user['_id'], 'email': user['email'], 'name': user['name'], 'age': user['age']}
+            return {'id': ObjectIDConverter.to_url(user['_id']), 'email': user['email'], 'name': user['name'], 'age': user['age']}
         else:
             abort(409)
     else:
@@ -57,7 +54,9 @@ def add_user():
 
 @app.route('/users/<objectid:user_id>', methods=['GET'])
 def get_user(user_id):
-    return {'user_id': '%s' % user_id}
+    users = mongo_client.db.users
+    user = users.find_one({'_id': user_id})
+    return {'id': ObjectIDConverter.to_url(user['_id']), 'email': user['email'], 'name': user['name'], 'age': user['age']}
 
 
 @app.route('/token', methods=['POST'])
@@ -82,9 +81,7 @@ def root():
 @app.route('/users', methods=['GET'])
 @auth.middleware_auth_token
 def get_all_users():
-    from pymongo import MongoClient
-    mongo = MongoClient()
-    users = mongo.db.user
+    users = mongo_client.db.users
 
     user_id = users.insert(
         {'name': 'Eloisa Renata Schons', 'sex': 'F', 'age': 18})

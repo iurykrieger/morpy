@@ -1,14 +1,13 @@
 from functools import wraps
-from pymongo import MongoClient
 from flask import request, abort
 from itsdangerous import (
     TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
-
+from database.db import mongo_client
 
 class Auth(object):
 
     def __init__(self, secret_key):
-        self.users = MongoClient().db.users
+        self.users = mongo_client.db.users
         self.secret_key = secret_key
 
     def generate_token(self, email, password, expiration=1296000):  # 15 days token
