@@ -9,8 +9,6 @@ load_dotenv(dotenv_path)
 
 DEBUG = os.environ.get('DEBUG', True)
 SECRET_KEY = os.environ.get('SECRET_KEY')
-API_TOKEN = os.environ.get('API_TOKEN')
-REDIS_URL = os.environ.get('REDIS_URL')
 
 #Mongo envroinment configuration
 MONGO_DBNAME = os.environ.get('MONGO_DBNAME')

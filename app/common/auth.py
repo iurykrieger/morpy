@@ -52,7 +52,7 @@ class Auth(object):
         @wraps(function)
         def decorated_function(*args, **kwargs):
             token = request.headers.get('token', None)
-            if not self.authenticate(token):
+            if not token or not self.authenticate(token):
                 abort(403)
             return function(*args, **kwargs)
         return decorated_function
