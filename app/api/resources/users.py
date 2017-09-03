@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
-
 from flask_restful import Resource
 from flask import request, abort, make_response
 from pymongo import ReturnDocument
 from database.db import db
 from app.api.models.user import User as UserModel
 from app.common.exceptions import StatusCodeException
-from app.common.auth import Auth
-from settings import SECRET_KEY
-
-auth = Auth(SECRET_KEY)
+from app.common.auth import auth
 
 
 class User(Resource):

@@ -3,6 +3,9 @@ from flask import request, abort
 from itsdangerous import (
     TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
 from database.db import db
+from settings import SECRET_KEY
+from app.common.exceptions import StatusCodeException
+
 
 class Auth(object):
 
@@ -22,7 +25,7 @@ class Auth(object):
                 }});
             return token
         else:
-            return None
+            raise StatusCodeException('User not found', 404)
 
     def authenticate(self, token):
         user = self.users.find_one({'auth.token': token})
@@ -56,3 +59,6 @@ class Auth(object):
                 abort(403)
             return function(*args, **kwargs)
         return decorated_function
+
+
+auth = Auth(SECRET_KEY)
