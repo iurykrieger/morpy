@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import make_response
 
 
 class StatusCodeException(Exception):
@@ -8,5 +8,10 @@ class StatusCodeException(Exception):
         self.message = message
         self.status_code = status_code
 
-    def to_json(self):
-        return {"status": self.status_code, "message": self.message}
+    def to_response(self):
+        response = make_response({
+            'message': self.message,
+            'status': self.status_code
+        })
+        response.status_code = self.status_code
+        return response

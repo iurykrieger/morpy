@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from flask import request, abort, make_response
+from flask import request, make_response
 from app.common.exceptions import StatusCodeException
 from app.common.auth import auth
 
@@ -16,4 +16,4 @@ class Token(Resource):
             else:
                 raise StatusCodeException('Invalid parameters', 400)
         except StatusCodeException as ex:
-            make_reponse(abort(ex.status_code, message=ex.message))
+            return ex.to_response()

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask_restful import Resource
-from flask import request, abort, make_response
+from flask import request, make_response
 from pymongo import ReturnDocument
 from database.db import db
 from app.api.models.user import User as UserModel
@@ -20,7 +20,7 @@ class User(Resource):
             user = UserModel(user)
             return make_response(user.to_json())
         except StatusCodeException as ex:
-            abort(ex.status_code)
+            return ex.to_response()
 
     @auth.middleware_auth_token
     def put(self, user_id):
@@ -31,10 +31,13 @@ class User(Resource):
                 {'$set': {'name': req['name']}},
                 return_document=ReturnDocument.AFTER
             )
-            user = UserModel(user)
-            return make_response(user.to_json())
+            if user:
+                user = UserModel(user)
+                return make_response(user.to_json())
+            else:
+                raise StatusCodeException('User not found', 404)
         except StatusCodeException as ex:
-            abort(ex.status_code)
+            return ex.to_response()
 
 
 class Users(Resource):
@@ -60,4 +63,4 @@ class Users(Resource):
             else:
                 raise StatusCodeException('Conflict', 409)
         except StatusCodeException as ex:
-            abort(ex.status_code)
+            return ex.to_response()

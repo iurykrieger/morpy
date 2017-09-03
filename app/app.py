@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask_api import FlaskAPI
-from flask import request, abort
+from flask import request
 from flask_restful import Api
 from database.db import ObjectIDConverter
 from routes import ROUTES
