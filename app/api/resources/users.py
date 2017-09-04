@@ -28,7 +28,7 @@ class User(Resource):
             req = request.get_json()
             user = self.users.find_one_and_update(
                 {'_id': user_id},
-                {'$set': {'name': req['name']}},
+                {'$set': {'name': req['name']}}, # XXX - Edit more than user's name
                 return_document=ReturnDocument.AFTER
             )
             if user:
