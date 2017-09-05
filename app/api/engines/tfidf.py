@@ -17,7 +17,7 @@ class ContentEngine(object):
     SIMKEY = 'p:smlr:%s'
 
     def __init__(self):
-        self.items = db.test_items
+        self.items = db.items
 
     def train(self):
         start = time.time()
@@ -48,8 +48,8 @@ class ContentEngine(object):
         :return: Nothin!
         """
         tf = TfidfVectorizer(analyzer='word', ngram_range=(
-            1, 3), min_df=0, stop_words='english')
-        tfidf_matrix = tf.fit_transform(ds['description'])
+            1, 4), min_df=0, stop_words='english')
+        tfidf_matrix = tf.fit_transform(ds['title'])
 
         cosine_similarities = linear_kernel(tfidf_matrix, tfidf_matrix)
 
