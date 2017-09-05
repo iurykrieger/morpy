@@ -20,7 +20,8 @@ api = Api(app)
 api.add_resource(Token, '/token', endpoint='token')
 api.add_resource(User, '/users/<objectid:user_id>', endpoint='user')
 api.add_resource(Users, '/users', endpoint='users')
-api.add_resource(Recommend, '/recommend/<int:item_id>/<int:number_of_recommendations>', endpoint='recommend')
+api.add_resource(
+    Recommend, '/recommend/<int:item_id>/top/<int:number_of_recommendations>', endpoint='recommend')
 
 
 @app.route('/', methods=['GET'])
@@ -31,24 +32,3 @@ def root():
 @app.route('/train', methods=['GET'])
 def train():
     return content_engine.train()
-
-"""
-@app.route(ROUTES['predict']['endpoint'], methods=ROUTES['predict']['methods'])
-@auth.middleware_auth_token
-def predict():
-    from engines import content_engine
-    item = request.data.get('item')
-    num_predictions = request.data.get('num', 10)
-    if not item:
-        return []
-    return content_engine.predict(str(item), num_predictions)
-
-
-@app.route(ROUTES['train']['endpoint'], methods=ROUTES['train']['methods'])
-@auth.middleware_auth_token
-def train():
-    from engines import content_engine
-    data_url = request.data.get('data-url', None)
-    content_engine.train('storage/%s' % data_url)
-    return {"message": "Success!", "success": 1}
-"""
