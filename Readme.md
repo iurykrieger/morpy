@@ -19,15 +19,11 @@ In case of adding a new dependency, run the `update_dependencies.sh` file at scr
 
     ./scripts/update_dependencies.sh
 
----
-
 ## Instalation
 
 Its very simple! Just execute the `setup.sh` script at scripts folder.
 
     ./scripts/setup.sh
-
----
 
 ## Usage
 
