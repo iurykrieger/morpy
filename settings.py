@@ -9,7 +9,6 @@ load_dotenv(dotenv_path)
 
 DEBUG = os.environ.get('DEBUG', True)
 SECRET_KEY = os.environ.get('SECRET_KEY')
-HOST = os.environ.get('HOST', '0.0.0.0')
 
 #Mongo envroinment configuration
 MONGO_DBNAME = os.environ.get('MONGO_DBNAME')
