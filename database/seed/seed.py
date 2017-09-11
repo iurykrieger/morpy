@@ -1,6 +1,6 @@
 
-from MovieLensSeeder import MovieLensSeeder
+from CSVSeeder import MovieLensCSVSeeder
 
 if __name__ == '__main__':
-    seeder = MovieLensSeeder()
+    seeder = MovieLensCSVSeeder()
     seeder.seed_items()

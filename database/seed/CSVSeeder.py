@@ -3,7 +3,7 @@ import pandas as pd
 import json
 
 
-class MovieLensSeeder(object):
+class MovieLensItemSeeder(object):
 
     def __init__(self):
         self.items = db.items
@@ -45,3 +45,15 @@ class MovieLensSeeder(object):
 
     def seed_ratings(self):
         pass
+
+
+class MovieLensCSVSeeder(object):
+
+    def __init__(self):
+        self.items = db.items
+        self.users = db.users
+        self.ratings = db.ratings
+
+    def seed_items(self):
+        items = pd.read_csv('storage/ml-20m/movies.csv', sep=',', encoding='latin1')
+        self.items.insert_many(json.loads(items.to_json(orient='records')))

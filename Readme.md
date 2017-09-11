@@ -5,8 +5,6 @@
  - Recommendations for
  - PYthon
 
----
-
 ## Dependencies
 
 All MORPY dependencies can be found at the given files:

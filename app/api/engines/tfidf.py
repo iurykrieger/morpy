@@ -49,6 +49,7 @@ class ContentEngine(object):
         """
         tf = TfidfVectorizer(analyzer='word', ngram_range=(
             1, 4), min_df=0, stop_words='english')
+        ds = ds[:20000]
         tfidf_matrix = tf.fit_transform(ds['title'])
 
         cosine_similarities = linear_kernel(tfidf_matrix, tfidf_matrix)
