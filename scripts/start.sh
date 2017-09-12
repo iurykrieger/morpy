@@ -6,4 +6,5 @@ source activate morpy
 
 # Run application
 echo "# Running application..."
+python -m compileall . &>/dev/null
 python run.py

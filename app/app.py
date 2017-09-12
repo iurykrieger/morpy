@@ -8,7 +8,7 @@ from api.resources.users import Users, User
 from api.resources.token import Token
 from api.resources.recommend import Recommend
 
-from api.engines.tfidf import content_engine
+from api.engines.ContentEngine import content_engine
 
 # Global defines
 app = FlaskAPI(__name__)

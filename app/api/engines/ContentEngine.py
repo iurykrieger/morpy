@@ -18,7 +18,7 @@ class ContentEngine(Engine):
         self.items = db.items
 
     def _prepare(self):
-        return pd.DataFrame(list(self.items.find()))[:2000]
+        return pd.DataFrame(list(self.items.find()))[:10000]
 
     def _calculate(self, data):
         tfidf = TfidfVectorizer(
@@ -48,7 +48,7 @@ class ContentEngine(Engine):
         self.items.find_one_and_update({
             'id': item['id']
         }, {'$set': {
-            'similar': similar_items
+            'similar': similars
         }})
 
     def train(self):
