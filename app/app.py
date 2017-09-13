@@ -18,10 +18,7 @@ api = Api(app)
 api.add_resource(Token, '/token', endpoint='token')
 api.add_resource(User, '/users/<objectid:user_id>', endpoint='user')
 api.add_resource(Users, '/users', endpoint='users')
-api.add_resource(
-    Recommend,
-    '/recommend/<int:item_id>/top/<int:number_of_recommendations>',
-    endpoint='recommend')
+api.add_resource(Recommend, '/recommend/<int:item_id>/top/<int:number_of_recommendations>', endpoint='recommend')
 
 
 @app.route('/', methods=['GET'])
