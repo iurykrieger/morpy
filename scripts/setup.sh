@@ -3,6 +3,10 @@
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
 
+# Configure env
+printf "${GREEN}\n# Configuring envorinment...\n${NC}"
+cp .env.example .env
+
 # Install mongodb
 printf "${GREEN}\n# Installing mongodb...\n${NC}"
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6
