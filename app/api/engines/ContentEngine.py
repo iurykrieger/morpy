@@ -4,7 +4,7 @@ import redis
 from flask import current_app
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
-from database.db import db
+from sklearn.feature_extraction import DictVectorizer
 from app.common.exceptions import StatusCodeException
 from Engine import Engine
 
@@ -14,18 +14,20 @@ def info(msg):
 
 
 class ContentEngine(Engine):
-    def __init__(self):
+    def __init__(self, db):
         self.items = db.items
 
     def _prepare(self):
-        return pd.DataFrame(list(self.items.find()))[:10000]
+        return pd.DataFrame(list(self.items.find()[:2000]))
 
     def _calculate(self, data):
         tfidf = TfidfVectorizer(
             analyzer='word',
             ngram_range=(1, 3),
             min_df=0,
+            smooth_idf=False,
             stop_words='english')
+
         tfidf_matrix = tfidf.fit_transform(data['title'])
         cosine_similarities = linear_kernel(tfidf_matrix, tfidf_matrix)
 
@@ -75,6 +77,3 @@ class ContentEngine(Engine):
         self._calculate(data)
         info("Engine trained in %s seconds." % (time.time() - start))
         return {'success': True}
-
-
-content_engine = ContentEngine()

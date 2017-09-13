@@ -7,8 +7,7 @@ from routes import ROUTES
 from api.resources.users import Users, User
 from api.resources.token import Token
 from api.resources.recommend import Recommend
-
-from api.engines.ContentEngine import content_engine
+from api.workers.ContentWorker import ContentWorker
 
 # Global defines
 app = FlaskAPI(__name__)
@@ -32,4 +31,5 @@ def root():
 
 @app.route('/train', methods=['GET'])
 def train():
-    return content_engine.train()
+    ContentWorker().start()
+    return {'status': 'training...'}

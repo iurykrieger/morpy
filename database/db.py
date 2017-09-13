@@ -5,6 +5,9 @@ from itsdangerous import base64_encode, base64_decode
 from bson.objectid import ObjectId
 from bson.errors import InvalidId
 
+MONGO_URI = 'mongodb://%s:%s@%s:%s/%s' % (MONGO_USERNAME, MONGO_PASSWORD,
+                                          MONGO_HOST, MONGO_PORT, MONGO_DBNAME)
+
 
 class ObjectIDConverter(BaseConverter):
     @staticmethod
@@ -19,7 +22,8 @@ class ObjectIDConverter(BaseConverter):
         return base64_encode(value.binary)
 
 
-MONGO_URI = 'mongodb://%s:%s@%s:%s/%s' % (
-    MONGO_USERNAME, MONGO_PASSWORD, MONGO_HOST, MONGO_PORT, MONGO_DBNAME)
-client = MongoClient(MONGO_URI)
-db = client[MONGO_DBNAME]
+def get_db():
+    return MongoClient(MONGO_URI, connect=False)[MONGO_DBNAME]
+
+
+db = get_db()
