@@ -62,3 +62,6 @@ fabric.properties
 
 #storage folder
 storage
+
+# Envroinment files
+.env
