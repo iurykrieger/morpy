@@ -1,52 +1,56 @@
 import pandas as pd
 import time
 import redis
-from flask import current_app
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 from sklearn.feature_extraction import DictVectorizer
 from app.common.exceptions import StatusCodeException
+from app.common.logging import info
 from Engine import Engine
-
-
-def info(msg):
-    current_app.logger.info(msg)
 
 
 class ContentEngine(Engine):
     def __init__(self, db):
         self.items = db.items
-
-    def _prepare(self):
-        return pd.DataFrame(list(self.items.find()[:2000]))
-
-    def _calculate(self, data):
-        tfidf = TfidfVectorizer(
+        self.data = []
+        self.tfidf = TfidfVectorizer(
             analyzer='word',
             ngram_range=(1, 3),
             min_df=0,
             smooth_idf=False,
             stop_words='english')
 
-        tfidf_matrix = tfidf.fit_transform(data['title'])
-        cosine_similarities = linear_kernel(tfidf_matrix, tfidf_matrix)
+    def _prepare(self):
+        self.data = pd.DataFrame(list(self.items.find()[:10000]))
+        self.tfidf_matrix = self.tfidf.fit_transform(self.data['title'])
+        self.cosine_similarities = linear_kernel(
+            self.tfidf_matrix, self.tfidf_matrix)
 
-        for index, row in data.iterrows():
-            similar_indices = cosine_similarities[index].argsort()[:-100:-1]
-            similar_items = [(cosine_similarities[index][i], data['id'][i])
-                             for i in similar_indices]
+    def _get_item_index(self, item_id):
+        for index, item in self.data.iterrows():
+            if item['id'] == item_id:
+                return item, index
 
-            # First item is the item itself, so remove it.
-            similar_items = similar_items[1:]
+    def _train_item(self, item, index):
+        similar_indices = self.cosine_similarities[index].argsort()[:-50:-1]
+        similar_items = [(self.cosine_similarities[index][similar_item], item['id'])
+                         for similar_item in similar_indices]
 
-            similar_items = [{
-                'id': item,
-                'similarity': similarity
-            } for similarity, item in similar_items]
+        # First item is the item itself, so remove it.
+        similar_items = similar_items[1:]
 
-            self._update(row, similar_items)
+        similar_items = [{
+            'id': item_id,
+            'similarity': similarity
+        } for similarity, item_id in similar_items]
 
-    def _update(self, item, similars=[]):
+        self._update(item, similar_items)
+
+    def _train(self):
+        for index, item in self.data.iterrows():
+            self._train_item(item, index)
+
+    def _update(self, item, similars):
         self.items.find_one_and_update({
             'id': item['id']
         }, {'$set': {
@@ -70,10 +74,19 @@ class ContentEngine(Engine):
         :return: Nothin!
         """
         start = time.time()
-        data = self._prepare()
+        self._prepare()
         info("Training data ingested in %s seconds." % (time.time() - start))
 
         start = time.time()
-        self._calculate(data)
+        self._train()
         info("Engine trained in %s seconds." % (time.time() - start))
-        return {'success': True}
+
+    def train_item(self, item_id):
+        start = time.time()
+        self._prepare()
+        info("Training data ingested in %s seconds." % (time.time() - start))
+
+        start = time.time()
+        item, index = self._get_item_index(item_id)
+        self._train_item(item, index)
+        info("Engine trained in %s seconds." % (time.time() - start))
