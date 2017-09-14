@@ -54,11 +54,14 @@ class Auth(object):
     def middleware_auth_token(self, function):
         @wraps(function)
         def decorated_function(*args, **kwargs):
-            token = request.headers.get('token', None)
-            if not token or not self.authenticate(token):
-                abort(403)
-            return function(*args, **kwargs)
-        return decorated_function
+            try:
+                token = request.headers.get('token', None)
+                if not token or not self.authenticate(token):
+                    raise StatusCodeException('Not authorized', 403)
+                return function(*args, **kwargs)
+            except StatusCodeException as ex:
+                return ex.to_response()
 
+        return decorated_function
 
 auth = Auth(SECRET_KEY)
