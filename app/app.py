@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask_api import FlaskAPI
-from flask import request
 from flask_restful import Api
 from database.db import ObjectIDConverter
-from routes import ROUTES
 from api.resources.users import Users, User
 from api.resources.token import Token
 from api.resources.recommend import Recommend
@@ -25,4 +23,4 @@ api.add_resource(TrainItem, TrainItem.ENDPOINT, endpoint='train_item')
 
 @app.route('/', methods=['GET'])
 def root():
-    return ROUTES
+    return {'status': 'running'}
