@@ -2,7 +2,7 @@
 from flask_api import FlaskAPI
 from flask_restful import Api
 from database.db import ObjectIDConverter
-from api.resources.users import Users, User
+from api.resources.user import Users, User
 from api.resources.token import Token
 from api.resources.recommend import Recommend
 from api.resources.train import TrainItem, Train

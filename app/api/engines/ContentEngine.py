@@ -21,8 +21,13 @@ class ContentEngine(Engine):
             stop_words='english')
 
     def _prepare(self):
-        self.data = pd.DataFrame(list(self.items.find()[:10000]))
-        self.tfidf_matrix = self.tfidf.fit_transform(self.data['title'])
+        self.data = pd.DataFrame(list(self.items.find({}, {
+            'id': 1,
+            'title': 1,
+            'genres': 1
+        })[:10000]))
+        self.tfidf_matrix = self.tfidf.fit_transform(
+            self.data['title'] + self.data['genres'])
         self.cosine_similarities = linear_kernel(
             self.tfidf_matrix, self.tfidf_matrix)
 
@@ -33,7 +38,7 @@ class ContentEngine(Engine):
 
     def _train_item(self, item, index):
         similar_indices = self.cosine_similarities[index].argsort()[:-50:-1]
-        similar_items = [(self.cosine_similarities[index][similar_item], item['id'])
+        similar_items = [(self.cosine_similarities[index][similar_item], self.data['id'][similar_item])
                          for similar_item in similar_indices]
 
         # First item is the item itself, so remove it.
@@ -89,4 +94,5 @@ class ContentEngine(Engine):
         start = time.time()
         item, index = self._get_item_index(item_id)
         self._train_item(item, index)
-        info("Item %s trained in %s seconds." % (item_id, (time.time() - start)))
+        info("Item %s trained in %s seconds." %
+             (item_id, (time.time() - start)))
