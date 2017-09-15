@@ -89,4 +89,4 @@ class ContentEngine(Engine):
         start = time.time()
         item, index = self._get_item_index(item_id)
         self._train_item(item, index)
-        info("Engine trained in %s seconds." % (time.time() - start))
+        info("Item %s trained in %s seconds." % (item_id, (time.time() - start)))

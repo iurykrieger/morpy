@@ -15,12 +15,12 @@ app.config.from_pyfile('../settings.py')
 app.url_map.converters['objectid'] = ObjectIDConverter
 api = Api(app)
 
-api.add_resource(Token, '/token', endpoint='token')
-api.add_resource(User, '/users/<objectid:user_id>', endpoint='user')
-api.add_resource(Users, '/users', endpoint='users')
-api.add_resource(Recommend, '/recommend/<int:item_id>/top/<int:number_of_recommendations>', endpoint='recommend')
-api.add_resource(Train, '/train', endpoint='train')
-api.add_resource(TrainItem, '/train/<int:item_id>', endpoint='train_item')
+api.add_resource(Token, Token.ENDPOINT, endpoint='token')
+api.add_resource(User, User.ENDPOINT, endpoint='user')
+api.add_resource(Users, Users.ENDPOINT, endpoint='users')
+api.add_resource(Recommend, Recommend.ENDPOINT, endpoint='recommend')
+api.add_resource(Train, Train.ENDPOINT, endpoint='train')
+api.add_resource(TrainItem, TrainItem.ENDPOINT, endpoint='train_item')
 
 
 @app.route('/', methods=['GET'])

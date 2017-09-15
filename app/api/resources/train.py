@@ -8,21 +8,23 @@ from app.api.workers.ContentWorker import ContentWorker
 
 class TrainItem(Resource):
 
+    ENDPOINT = '/train/<int:item_id>'
+
     @auth.middleware_auth_token
     def get(self, item_id):
         try:
             ContentWorker().train_item(item_id)
-            return make_response({})
         except StatusCodeException as ex:
             return ex.to_response()
 
 
 class Train(Resource):
+    
+    ENDPOINT = '/train'
 
     @auth.middleware_auth_token
     def get(self):
         try:
             ContentWorker().train()
-            return make_response({})
         except StatusCodeException as ex:
             return ex.to_response()

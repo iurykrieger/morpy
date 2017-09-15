@@ -9,6 +9,8 @@ from app.common.auth import auth
 
 
 class User(Resource):
+    
+    ENDPOINT = '/users/<objectid:user_id>'
 
     def __init__(self):
         self.users = db.users
@@ -25,10 +27,14 @@ class User(Resource):
     @auth.middleware_auth_token
     def put(self, user_id):
         try:
-            req = request.get_json()
+            user_info = request.get_json()
             user = self.users.find_one_and_update(
                 {'_id': user_id},
-                {'$set': {'name': req['name']}}, # XXX - Edit more than user's name
+                {'$set': {
+                    'name': user_info['name'],
+                    'age': user_info['age'],
+                    'email': user_info['email']
+                }},
                 return_document=ReturnDocument.AFTER
             )
             if user:
@@ -41,6 +47,8 @@ class User(Resource):
 
 
 class Users(Resource):
+    
+    ENDPOINT = '/users'
 
     def __init__(self):
         self.users = db.users
