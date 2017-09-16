@@ -6,18 +6,16 @@ from multiprocessing import Process
 
 class ContentWorker(object):
 
-    def train_item(self, item_id):
-        process = Process(target=ContentEngine(db.get_db()).train_item, args=(item_id, ))
-        process.daemon = True  # Daemonize it
+    def __init__(self):
+        self.engine = ContentEngine(db.get_db())
+
+    def _start_process(self, target, args):
+        process = Process(target=target, args=args)
+        process.daemon = True
         process.start()
+
+    def train_item(self, item_id):
+        self._start_process(self.engine.train_item, (item_id, ))
 
     def train(self):
-        process = Process(target=ContentEngine(db.get_db()).train, args=())
-        process.daemon = True  # Daemonize it
-        process.start()
-
-    def _train_item(self, item_id):
-        ContentEngine(db.get_db()).train_item(item_id)
-
-    def _train(self):
-        ContentEngine(db.get_db()).train()
+        self._start_process(self.engine.train, ())

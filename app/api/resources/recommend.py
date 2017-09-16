@@ -6,7 +6,7 @@ from app.api.recommenders.ContentRecommender import content_recommender
 
 class Recommend(Resource):
     
-    ENDPOINT = '/recommend/<int:item_id>/top/<int:number_of_recommendations>'
+    ENDPOINT = '/recommend/<objectid:item_id>/top/<int:number_of_recommendations>'
 
     @auth.middleware_auth_token
     def get(self, item_id, number_of_recommendations=10):

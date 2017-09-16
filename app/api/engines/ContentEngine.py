@@ -22,7 +22,7 @@ class ContentEngine(Engine):
 
     def _prepare(self):
         self.data = pd.DataFrame(list(self.items.find({}, {
-            'id': 1,
+            '_id': 1,
             'title': 1,
             'genres': 1
         })[:10000]))
@@ -33,19 +33,19 @@ class ContentEngine(Engine):
 
     def _get_item_index(self, item_id):
         for index, item in self.data.iterrows():
-            if item['id'] == item_id:
+            if item['_id'] == item_id:
                 return item, index
 
     def _train_item(self, item, index):
         similar_indices = self.cosine_similarities[index].argsort()[:-50:-1]
-        similar_items = [(self.cosine_similarities[index][similar_item], self.data['id'][similar_item])
+        similar_items = [(self.cosine_similarities[index][similar_item], self.data['_id'][similar_item])
                          for similar_item in similar_indices]
 
         # First item is the item itself, so remove it.
         similar_items = similar_items[1:]
 
         similar_items = [{
-            'id': item_id,
+            '_id': item_id,
             'similarity': similarity
         } for similarity, item_id in similar_items]
 
@@ -57,7 +57,7 @@ class ContentEngine(Engine):
 
     def _update(self, item, similars):
         self.items.find_one_and_update({
-            'id': item['id']
+            '_id': item['_id']
         }, {'$set': {
             'similar': similars
         }})

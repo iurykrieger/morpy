@@ -8,7 +8,7 @@ from app.api.workers.ContentWorker import ContentWorker
 
 class TrainItem(Resource):
 
-    ENDPOINT = '/train/<int:item_id>'
+    ENDPOINT = '/train/<objectid:item_id>'
 
     @auth.middleware_auth_token
     def get(self, item_id):

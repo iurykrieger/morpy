@@ -10,7 +10,7 @@ from app.common.auth import auth
 
 class User(Resource):
     
-    ENDPOINT = '/users/<objectid:user_id>'
+    ENDPOINT = '/user/<objectid:user_id>'
 
     def __init__(self):
         self.users = db.users
@@ -48,7 +48,7 @@ class User(Resource):
 
 class Users(Resource):
     
-    ENDPOINT = '/users'
+    ENDPOINT = '/user'
 
     def __init__(self):
         self.users = db.users

@@ -1,5 +1,6 @@
 from Recommender import Recommender
 from database.db import db
+from app.common.adapter import to_json
 from app.common.exceptions import StatusCodeException
 
 
@@ -16,9 +17,9 @@ class ContentRecommender(Recommender):
         :return: A list of lists like: [["19", 0.2203], ["494", 0.1693], ...]. The first item in each sub-list is
         the item ID and the second is the similarity score. Sorted by similarity score, descending.
         """
-        item = self.items.find_one({'id': item_id})
+        item = self.items.find_one({'_id': item_id})
         if item:
-            return item['similar'][:number_of_recommendations]
+            return map(to_json, item['similar'][:number_of_recommendations])
         else:
             raise StatusCodeException('No item found', 404)
 

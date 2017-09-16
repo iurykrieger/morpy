@@ -6,6 +6,7 @@ from api.resources.user import Users, User
 from api.resources.token import Token
 from api.resources.recommend import Recommend
 from api.resources.train import TrainItem, Train
+from api.resources.item import Items, Item
 
 # Global defines
 app = FlaskAPI(__name__)
@@ -19,7 +20,8 @@ api.add_resource(Users, Users.ENDPOINT, endpoint='users')
 api.add_resource(Recommend, Recommend.ENDPOINT, endpoint='recommend')
 api.add_resource(Train, Train.ENDPOINT, endpoint='train')
 api.add_resource(TrainItem, TrainItem.ENDPOINT, endpoint='train_item')
-
+api.add_resource(Items, Items.ENDPOINT, endpoint='items')
+api.add_resource(Item, Item.ENDPOINT, endpoint='item')
 
 @app.route('/', methods=['GET'])
 def root():
