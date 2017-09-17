@@ -25,7 +25,7 @@ class ContentEngine(Engine):
             '_id': 1,
             'title': 1,
             'genres': 1
-        })[:10000]))
+        })[:20000]))
         self.tfidf_matrix = self.tfidf.fit_transform(
             self.data['title'] + self.data['genres'])
         self.cosine_similarities = linear_kernel(

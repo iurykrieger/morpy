@@ -41,3 +41,15 @@ class Items(Resource):
             item['_id'] = ObjectIDConverter.to_url(item['_id'])
             items.append(item)
         return make_response(items)
+
+    @auth.middleware_auth_token
+    def post(self):
+        try:
+            item = request.get_json()
+            if '_id' not in item: # XXX - Compare unique metadata values
+                item['_id'] = ObjectIDConverter.to_url(self.items.insert(item))
+                return make_response(item)
+            else:
+                raise StatusCodeException('Conflict', 409)
+        except StatusCodeException as ex:
+            return ex.to_response()
