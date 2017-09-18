@@ -6,6 +6,7 @@ from app.api.models.user import User as UserModel
 from app.common.exceptions import StatusCodeException
 from app.common.auth import auth
 from bson.json_util import loads, dumps
+from app.api.metadata.ItemMetadata import ItemMetadata
 
 class Item(Resource):
 
@@ -13,6 +14,7 @@ class Item(Resource):
 
     def __init__(self):
         self.items = db.items
+        self.meta = db.item_metadata
 
     @auth.middleware_auth_token
     def get(self, item_id):
@@ -20,6 +22,9 @@ class Item(Resource):
             item = self.items.find_one(
                 {'_id': item_id},
                 {'similar': 0})
+            m = self.meta.find_one({"active": True}, {"_id": 0})
+            meta = ItemMetadata(m)
+            print meta.validate(item)
             item['_id'] = ObjectIDConverter.to_url(item['_id'])
             return make_response(item)
         except StatusCodeException as ex:

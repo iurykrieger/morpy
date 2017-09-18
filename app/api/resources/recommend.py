@@ -5,7 +5,7 @@ from app.common.auth import auth
 from app.api.recommenders.ContentRecommender import content_recommender
 
 class Recommend(Resource):
-    
+
     ENDPOINT = '/recommend/<objectid:item_id>/top/<int:number_of_recommendations>'
 
     @auth.middleware_auth_token

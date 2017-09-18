@@ -1,5 +1,5 @@
 from app.common.exceptions import StatusCodeException
-
+from datetime import datetime
 """
 {
     "type" : "item",
@@ -24,9 +24,10 @@ from app.common.exceptions import StatusCodeException
 }
 """
 
+TYPE_MAPPING = {'unicode': 'string', 'string': 'string'}
+
 
 class ItemMetadata(object):
-
     def __init__(self, metadata):
         try:
             self.type = metadata['type']
@@ -38,8 +39,8 @@ class ItemMetadata(object):
             if len(self.attributes) > 0:
                 for attribute in self.attributes:
                     if 'name' not in attribute:
-                        raise StatusCodeException(
-                            'Missing attribute name', 400)
+                        raise StatusCodeException('Missing attribute name',
+                                                  400)
                     elif 'type' not in attribute:
                         raise StatusCodeException(
                             'Missing "%s" type' % attribute['name'], 400)
@@ -50,15 +51,12 @@ class ItemMetadata(object):
         except Exception as ex:
             raise StatusCodeException('Missing fields', 400)
 
-    def validate(self, item):
-        for attr in self.attributes:
-            print(attr)
-
     def to_database(self):
         return {
             'type': self.type,
             'attributes': self.attributes,
-            'active': True
+            'active': True,
+            'created_at': datetime.now()
         }
 
     def to_json(self):
