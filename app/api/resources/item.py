@@ -2,11 +2,11 @@
 from flask_restful import Resource
 from flask import request, make_response, jsonify
 from database.db import db, ObjectIDConverter
-from app.api.models.user import User as UserModel
 from app.common.exceptions import StatusCodeException
 from app.common.auth import auth
 from bson.json_util import loads, dumps
 from app.api.metadata.ItemMetadata import ItemMetadata
+from app.api.validators.ItemValidator import ItemValidator
 
 class Item(Resource):
 
@@ -22,11 +22,12 @@ class Item(Resource):
             item = self.items.find_one(
                 {'_id': item_id},
                 {'similar': 0})
-            m = self.meta.find_one({"active": True}, {"_id": 0})
-            meta = ItemMetadata(m)
-            print meta.validate(item)
-            item['_id'] = ObjectIDConverter.to_url(item['_id'])
-            return make_response(item)
+            meta = ItemMetadata(self.meta.find_one({"active": True}))
+            validator = ItemValidator(meta, item)
+
+            if validator.validate():
+                item['_id'] = ObjectIDConverter.to_url(item['_id'])
+                return make_response(item)
         except StatusCodeException as ex:
             return ex.to_response()
 

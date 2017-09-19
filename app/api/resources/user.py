@@ -3,7 +3,6 @@ from flask_restful import Resource
 from flask import request, make_response
 from pymongo import ReturnDocument
 from database.db import db
-from app.api.models.user import User as UserModel
 from app.common.exceptions import StatusCodeException
 from app.common.auth import auth
 
