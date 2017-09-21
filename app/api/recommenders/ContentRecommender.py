@@ -20,7 +20,8 @@ class ContentRecommender(Recommender):
         item = self.items.find_one({'_id': item_id})
         if item:
             if 'similar' in item:
-                return map(to_json, item['similar'][:number_of_recommendations])
+                similar = [it['_id'] for it in item['similar'][:number_of_recommendations]]
+                return map(to_json, self.items.find({'_id': {'$in' : similar}}))
             
             return {}
         else:
