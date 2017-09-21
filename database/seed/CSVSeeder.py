@@ -14,30 +14,9 @@ class MovieLensItemSeeder(object):
         attrs = [
             'id',
             'title',
-            'release_date',
-            'video_release_date',
-            'imdb_url',
-            'unkwn',
-            'action',
-            'adventure',
-            'animation',
-            'children',
-            'comedy',
-            'crime',
-            'documentary',
-            'drama',
-            'fantasy',
-            'film-noir',
-            'horror',
-            'musical',
-            'mystery',
-            'romance',
-            'sci-fi',
-            'thriller',
-            'war',
-            'western'
+            'genres'
         ]
-        items = pd.read_csv('storage/ml-100k/u.item', sep='|', names=attrs, encoding='latin1')
+        items = pd.read_csv('storage/ml-1m/movies.dat', sep=':', names=attrs, encoding='latin1')
         self.items.insert_many(json.loads(items.to_json(orient='records')))
 
     def seed_users(self):

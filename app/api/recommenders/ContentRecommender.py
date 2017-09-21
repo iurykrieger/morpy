@@ -19,7 +19,10 @@ class ContentRecommender(Recommender):
         """
         item = self.items.find_one({'_id': item_id})
         if item:
-            return map(to_json, item['similar'][:number_of_recommendations])
+            if 'similar' in item:
+                return map(to_json, item['similar'][:number_of_recommendations])
+            
+            return {}
         else:
             raise StatusCodeException('No item found', 404)
 

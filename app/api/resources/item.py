@@ -22,9 +22,6 @@ class Item(Resource):
             item = self.items.find_one(
                 {'_id': item_id},
                 {'similar': 0})
-            m = self.meta.find_one({"active": True}, {"_id": 0})
-            meta = ItemMetadata(m)
-            print meta.validate(item)
             item['_id'] = ObjectIDConverter.to_url(item['_id'])
             return make_response(item)
         except StatusCodeException as ex:

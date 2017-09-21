@@ -25,7 +25,7 @@ class ContentEngine(Engine):
             '_id': 1,
             'title': 1,
             'genres': 1
-        })[:20000]))
+        })[:10000]))
         self.tfidf_matrix = self.tfidf.fit_transform(
             self.data['title'] + self.data['genres'])
         self.cosine_similarities = linear_kernel(
@@ -55,11 +55,11 @@ class ContentEngine(Engine):
         for index, item in self.data.iterrows():
             self._train_item(item, index)
 
-    def _update(self, item, similars):
+    def _update(self, item, similar):
         self.items.find_one_and_update({
             '_id': item['_id']
         }, {'$set': {
-            'similar': similars
+            'similar': similar
         }})
 
     def train(self):
