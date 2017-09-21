@@ -1,5 +1,54 @@
 from app.common.exceptions import StatusCodeException
+from database.db import db
 from datetime import datetime
+
+TYPE_MAPPING = {'unicode': 'string', 'string': 'string'}
+
+
+class ItemMetadata(object):
+    def __init__(self, metadata):
+        try:
+            self.meta = metadata
+            self.type = self.meta['type']
+            self.attributes = self.meta['attributes']
+            self.active = self.meta['active'] if 'ative' in self.meta else True
+            self.created_at = self.meta['created_at'] if 'created_at' in self.meta else datetime.now(
+            )
+
+            if self.type != 'item':
+                raise StatusCodeException('Invalid type', 400)
+
+            if len(self.attributes) > 0:
+                for attribute in self.attributes:
+                    if 'name' not in attribute:
+                        raise StatusCodeException('Missing metadata attribute "name"',
+                                                  400)
+                    elif 'type' not in attribute:
+                        raise StatusCodeException(
+                            'Missing "%s" type' % attribute['name'], 400)
+            else:
+                raise StatusCodeException('Empty metadata attributes', 400)
+        except StatusCodeException as ex:
+            raise ex
+        except Exception as ex:
+            raise StatusCodeException('Missing metadata fields', 400)
+
+    def to_database(self):
+        return {
+            'type': self.type,
+            'attributes': self.attributes,
+            'active': self.active,
+            'created_at': self.created_at
+        }
+
+    def to_json(self):
+        return {
+            'type': self.type,
+            'attributes': self.attributes,
+            'active': self.active
+        }
+
+
 """
 {
     "type" : "item",
@@ -23,45 +72,3 @@ from datetime import datetime
     ]
 }
 """
-
-TYPE_MAPPING = {'unicode': 'string', 'string': 'string'}
-
-
-class ItemMetadata(object):
-    def __init__(self, metadata):
-        try:
-            self.type = metadata['type']
-            self.attributes = metadata['attributes']
-
-            if self.type != 'item':
-                raise StatusCodeException('Invalid type', 400)
-
-            if len(self.attributes) > 0:
-                for attribute in self.attributes:
-                    if 'name' not in attribute:
-                        raise StatusCodeException('Missing attribute name',
-                                                  400)
-                    elif 'type' not in attribute:
-                        raise StatusCodeException(
-                            'Missing "%s" type' % attribute['name'], 400)
-            else:
-                raise StatusCodeException('Empty attributes', 400)
-        except StatusCodeException as ex:
-            raise ex
-        except Exception as ex:
-            raise StatusCodeException('Missing fields', 400)
-
-    def to_database(self):
-        return {
-            'type': self.type,
-            'attributes': self.attributes,
-            'active': True,
-            'created_at': datetime.now()
-        }
-
-    def to_json(self):
-        return {
-            'type': self.type,
-            'attributes': self.attributes,
-            'active': True
-        }

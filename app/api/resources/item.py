@@ -3,6 +3,7 @@ from flask_restful import Resource
 from flask import request, make_response, jsonify
 from database.db import db, ObjectIDConverter
 from app.api.models.user import User as UserModel
+from app.api.models.ItemModel import ItemModel
 from app.common.exceptions import StatusCodeException
 from app.common.auth import auth
 from bson.json_util import loads, dumps
@@ -22,8 +23,8 @@ class Item(Resource):
             item = self.items.find_one(
                 {'_id': item_id},
                 {'similar': 0})
-            item['_id'] = ObjectIDConverter.to_url(item['_id'])
-            return make_response(item)
+            item = ItemModel(item)
+            return make_response(item.to_json())
         except StatusCodeException as ex:
             return ex.to_response()
 
@@ -38,11 +39,8 @@ class Items(Resource):
     @auth.middleware_auth_token
     def get(self):
         all_items = self.items.find({}, {'similar': 0})
-        items = []
-        for item in all_items:
-            item['_id'] = ObjectIDConverter.to_url(item['_id'])
-            items.append(item)
-        return make_response(items)
+        json_items = [ItemModel(item).to_json() for item in all_items]
+        return make_response(json_items)
 
     @auth.middleware_auth_token
     def post(self):
