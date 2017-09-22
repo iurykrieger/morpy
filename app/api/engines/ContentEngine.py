@@ -1,17 +1,20 @@
 import pandas as pd
 import time
-import redis
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 from sklearn.feature_extraction import DictVectorizer
 from app.common.exceptions import StatusCodeException
 from app.common.logging import info
 from Engine import Engine
+from app.api.metadata.ItemMetadata import ItemMetadata
+import itertools
 
 
 class ContentEngine(Engine):
     def __init__(self, db):
         self.items = db.items
+        self.item_meta = ItemMetadata(
+            db.item_metadata.find_one({'active': True}))
         self.data = []
         self.tfidf = TfidfVectorizer(
             analyzer='word',
@@ -20,14 +23,24 @@ class ContentEngine(Engine):
             smooth_idf=False,
             stop_words='english')
 
+    def _get_recommendable_attributes(self):
+        return [attribute['name'] for attribute in self.item_meta.attributes if attribute['recommendable']]
+
+    def _get_data_filter(self):
+        attributes = self._get_recommendable_attributes()
+        attribute_filter = {'$project': {}}
+
+        for attr in attributes:
+            attribute_filter['$project'][attr] = { '$ifNull': ['${name}'.format(name=attr), '']}
+        attribute_filter['$project']['concated_attrs'] = {'$concat': ['${name}'.format(name=attr) for attr in attributes]}
+        
+        return attribute_filter
+
     def _prepare(self):
-        self.data = pd.DataFrame(list(self.items.find({}, {
-            '_id': 1,
-            'title': 1,
-            'genres': 1
-        })[:10000]))
+        self.data = pd.DataFrame(list(self.items.aggregate([self._get_data_filter()])))
+        print self.data['concated_attrs']
         self.tfidf_matrix = self.tfidf.fit_transform(
-            self.data['title'] + self.data['genres'])
+            self.data['concated_attrs'])
         self.cosine_similarities = linear_kernel(
             self.tfidf_matrix, self.tfidf_matrix)
 

@@ -23,8 +23,7 @@ class Item(Resource):
             item = self.items.find_one(
                 {'_id': item_id},
                 {'similar': 0})
-            item = ItemModel(item)
-            return make_response(item.to_json())
+            return make_response(ItemModel(item).to_json())
         except StatusCodeException as ex:
             return ex.to_response()
 
