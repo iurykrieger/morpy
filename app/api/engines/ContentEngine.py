@@ -29,15 +29,17 @@ class ContentEngine(Engine):
     def _get_data_filter(self):
         attributes = self._get_recommendable_attributes()
         attribute_filter = {'$project': {}}
+        concat_filter = {'$project': {}}
 
         for attr in attributes:
             attribute_filter['$project'][attr] = { '$ifNull': ['${name}'.format(name=attr), '']}
-        attribute_filter['$project']['concated_attrs'] = {'$concat': ['${name}'.format(name=attr) for attr in attributes]}
         
-        return attribute_filter
+        concat_filter['$project']['concated_attrs'] = {'$concat': ['${name}'.format(name=attr) for attr in attributes]}
+        
+        return [attribute_filter, concat_filter]
 
     def _prepare(self):
-        self.data = pd.DataFrame(list(self.items.aggregate([self._get_data_filter()])))
+        self.data = pd.DataFrame(list(self.items.aggregate(self._get_data_filter())))
         print self.data['concated_attrs']
         self.tfidf_matrix = self.tfidf.fit_transform(
             self.data['concated_attrs'])
