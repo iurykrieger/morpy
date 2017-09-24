@@ -6,8 +6,7 @@ from app.api.metadata.ItemMetadata import ItemMetadata
 from app.api.metadata.UserMetadata import UserMetadata
 from app.common.exceptions import StatusCodeException
 from app.common.auth import auth
-from bson.json_util import loads, dumps
-
+import pymongo
 
 class Metadata(Resource):
 
@@ -79,9 +78,11 @@ class MetadataList(Resource):
     def get(self, meta_type):
         try:
             if meta_type == 'item':
-                json_metadata = [ItemMetadata(meta).to_json() for meta in self.item_meta.find()]
+                json_metadata = [ItemMetadata(meta).to_json() 
+                    for meta in self.item_meta.find().sort([('version', pymongo.DESCENDING)])]
             elif meta_type == 'user':
-                json_metadata = [UserMetadata(meta).to_json() for meta in self.user_meta.find()]
+                json_metadata = [UserMetadata(meta).to_json()
+                    for meta in self.user_meta.find().sort([('version', pymongo.DESCENDING)])]
             else:
                 raise StatusCodeException('Invalid type', 400)
 
