@@ -4,14 +4,16 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 from app.common.logging import info
 from Engine import Engine
+from database import db
 from app.api.metadata.ItemMetadata import ItemMetadata
 
 
 class ContentEngine(Engine):
-    def __init__(self, db):
-        self.items = db.items
+    def __init__(self):
+        self.db = db.get_db()
+        self.items = self.db.items
         self.item_meta = ItemMetadata(
-            db.item_metadata.find_one({'active': True}))
+            self.db.item_metadata.find_one({'active': True}))
         self.data = []
         self.tfidf = TfidfVectorizer(
             analyzer='word',
