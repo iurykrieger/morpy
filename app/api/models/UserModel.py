@@ -1,10 +1,11 @@
 from app.api.metadata.UserMetadata import UserMetadata, TYPE_MAPPING
-from database.db import db, ObjectIDConverter
-
+from database.db import ObjectIDConverter
+from app.api.services.UserMetadataService import UserMetadataService
 
 class UserModel(object):
     def __init__(self, user):
-        self.meta = UserMetadata(db.user_metadata.find_one({'active': True}))
+        self.meta_service = UserMetadataService()
+        self.meta = UserMetadata(self.meta_service.get_active())
         self.user = user
 
     def _get_existent_attributes(self):

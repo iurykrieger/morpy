@@ -1,8 +1,7 @@
 from functools import wraps
 from flask import request, abort
-from itsdangerous import (
-    TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
-from database.db import db
+from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, 
+    BadSignature, SignatureExpired)
 from settings import SECRET_KEY
 from app.api.services.UserService import UserService
 from app.common.exceptions import StatusCodeException
@@ -15,7 +14,7 @@ class Auth(object):
         self.secret_key = secret_key
 
     def generate_token(self, email, password, expiration=1296000):  # 15 days token
-        user_id = self.service.exists(email, password)
+        user_id = self.service.verify(email, password)
         if user_id:
             serializer = Serializer(self.secret_key, expires_in=expiration)
             token = serializer.dumps({'email': email, 'password': password})

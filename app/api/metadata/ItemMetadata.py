@@ -1,5 +1,4 @@
 from app.common.exceptions import StatusCodeException
-from database.db import db
 from datetime import datetime
 
 TYPE_MAPPING = {'unicode': 'string', 'string': 'string'}

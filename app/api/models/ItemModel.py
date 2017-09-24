@@ -1,10 +1,11 @@
 from app.api.metadata.ItemMetadata import ItemMetadata, TYPE_MAPPING
-from database.db import db, ObjectIDConverter
-
+from app.api.services.ItemMetadataService import ItemMetadataService
+from database.db import ObjectIDConverter
 
 class ItemModel(object):
     def __init__(self, item):
-        self.meta = ItemMetadata(db.item_metadata.find_one({'active': True}))
+        self.meta_service = ItemMetadataService()
+        self.meta = ItemMetadata(self.meta_service.get_active())
         self.item = item
 
     def _get_existent_attributes(self):
