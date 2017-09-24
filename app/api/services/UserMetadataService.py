@@ -1,5 +1,5 @@
 from database.db import db, ObjectIDConverter
-from pymongo
+import pymongo
 
 
 class UserMetadataService(object):
