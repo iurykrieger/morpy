@@ -36,6 +36,17 @@ class User(Resource):
         except StatusCodeException as ex:
             return ex.to_response()
 
+    @auth.middleware_auth_token
+    def delete(self, user_id):
+        try:
+            if self.service.get_by_id(user_id):
+                self.service.remove(user_id)
+                return make_response()
+            else:
+                raise StatusCodeException('User not found', 404)
+        except StatusCodeException as ex:
+            return ex.to_response()
+
 
 class Users(Resource):
     

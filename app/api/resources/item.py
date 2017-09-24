@@ -9,6 +9,7 @@ from app.api.services.ItemMetadataService import ItemMetadataService
 from app.api.services.ItemService import ItemService
 from app.api.metadata.ItemMetadata import ItemMetadata
 
+
 class Item(Resource):
 
     ENDPOINT = '/item/<objectid:item_id>'
@@ -20,7 +21,21 @@ class Item(Resource):
     def get(self, item_id):
         try:
             item = self.item_service.get_by_id(item_id)
-            return make_response(ItemModel(item).to_json())
+            if item:
+                return make_response(ItemModel(item).to_json())
+            else:
+                raise StatusCodeException('Item not found', 404)
+        except StatusCodeException as ex:
+            return ex.to_response()
+
+    @auth.middleware_auth_token
+    def delete(self, item_id):
+        try:
+            if self.item_service.get_by_id(item_id):
+                self.item_service.remove(item_id)
+                return make_response()
+            else:
+                raise StatusCodeException('Item not found', 404)
         except StatusCodeException as ex:
             return ex.to_response()
 
@@ -41,7 +56,7 @@ class Items(Resource):
     def post(self):
         try:
             item = request.get_json()
-            if '_id' not in item: # XXX - Compare unique metadata values
+            if '_id' not in item:  # XXX - Compare unique metadata values
                 item['_id'] = self.item_service.insert(item)
                 return make_response(item)
             else:

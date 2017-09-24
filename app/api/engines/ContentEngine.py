@@ -36,13 +36,11 @@ class ContentEngine(Engine):
         recs = [(self.cosine_similarities[index][similar_item], self.data['_id'][similar_item])
                 for similar_item in similar_indices]
 
-        # First item is the item itself, so remove it.
-        recs = recs[1:]
         recs = [
             {
                 '_id': item_id,
                 'similarity': similarity
-            } for similarity, item_id in recs
+            } for similarity, item_id in recs[1:] # First item is the item itself, so remove it.
         ]
 
         self.item_service.update_recommendations(item['_id'], recs)

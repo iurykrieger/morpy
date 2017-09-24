@@ -20,6 +20,9 @@ class ItemService(object):
     def insert(self, item_dict):
         return  ObjectIDConverter.to_url(self.items.insert(item_dict))
 
+    def remove(self, item_id):
+        return self.items.remove({'_id': item_id})
+
     def update_recommendations(self, item_id, recommendations):
         return self.items.find_one_and_update(
             {'_id': item_id},

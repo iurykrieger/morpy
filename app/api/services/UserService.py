@@ -1,6 +1,7 @@
 from database.db import db, ObjectIDConverter
 from pymongo import ReturnDocument
 
+
 class UserService(object):
 
     def __init__(self):
@@ -36,6 +37,9 @@ class UserService(object):
 
     def insert(self, user_dict):
         return ObjectIDConverter.to_url(self.users.insert(user_dict))
+
+    def remove(self, user_id):
+        return self.users.remove({'_id': user_id})
 
     def remove_token(self, user_id):
         return self.users.find_one_and_update(
