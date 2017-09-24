@@ -12,7 +12,7 @@ class UserModel(object):
         return [attr for attr in self.meta.attributes 
             if (attr['name'] in self.user) and  ('hide' not in attr)]
 
-    def _validate(self):
+    def validate(self):
         for attr in self.meta.attributes:
             if attr['name'] not in self.user:
                 return False

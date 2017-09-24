@@ -3,28 +3,25 @@ import time
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 from app.common.logging import info
-from Engine import Engine
-from app.api.services.ItemMetadataService import ItemMetadataService
 from app.api.services.ItemService import ItemService
 
 
-class ContentEngine(Engine):
+class ContentEngine(object):
     def __init__(self):
+        start = time.time()
         self.item_service = ItemService()
-        self.data = []
+        self.data = pd.DataFrame(list(self.item_service.get_rec_data()))
         self.tfidf = TfidfVectorizer(
             analyzer='word',
             ngram_range=(1, 3),
             min_df=0,
             smooth_idf=False,
             stop_words='english')
-
-    def _prepare(self):
-        self.data = pd.DataFrame(list(self.item_service.get_rec_data()))
         self.tfidf_matrix = self.tfidf.fit_transform(
             self.data['concated_attrs'])
         self.cosine_similarities = linear_kernel(
             self.tfidf_matrix, self.tfidf_matrix)
+        info("Training data ingested in %s seconds." % (time.time() - start))
 
     def _get_item_index(self, item_id):
         for index, item in self.data.iterrows():
@@ -40,7 +37,7 @@ class ContentEngine(Engine):
             {
                 '_id': item_id,
                 'similarity': similarity
-            } for similarity, item_id in recs[1:] # First item is the item itself, so remove it.
+            } for similarity, item_id in recs[1:]  # First item is the item itself, so remove it.
         ]
 
         self.item_service.update_recommendations(item['_id'], recs)
@@ -66,18 +63,10 @@ class ContentEngine(Engine):
         :return: Nothin!
         """
         start = time.time()
-        self._prepare()
-        info("Training data ingested in %s seconds." % (time.time() - start))
-
-        start = time.time()
         self._train()
         info("Engine trained in %s seconds." % (time.time() - start))
 
     def train_item(self, item_id):
-        start = time.time()
-        self._prepare()
-        info("Training data ingested in %s seconds." % (time.time() - start))
-
         start = time.time()
         item, index = self._get_item_index(item_id)
         self._train_item(item, index)

@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import request, abort
+from flask import request
 from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, 
     BadSignature, SignatureExpired)
 from settings import SECRET_KEY

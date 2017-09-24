@@ -1,4 +1,4 @@
-from database.db import db, ObjectIDConverter
+from database.db import db
 import pymongo
 
 

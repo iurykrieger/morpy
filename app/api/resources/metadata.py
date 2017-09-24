@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask_restful import Resource
-from flask import request, make_response, jsonify
-from database.db import ObjectIDConverter
+from flask import request, make_response
 from app.api.metadata.ItemMetadata import ItemMetadata
 from app.api.metadata.UserMetadata import UserMetadata
 from app.common.exceptions import StatusCodeException

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from flask_restful import Resource
-from flask import make_response
 from app.common.exceptions import StatusCodeException
 from app.common.auth import auth
 from app.api.workers.ContentWorker import ContentWorker

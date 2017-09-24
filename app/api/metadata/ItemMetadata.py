@@ -17,10 +17,11 @@ class ItemMetadata(object):
             if self.type != 'item':
                 raise StatusCodeException('Invalid type', 400)
 
-            if len(self.attributes) > 0:
+            if self.attributes:
                 for attribute in self.attributes:
                     if 'name' not in attribute:
-                        raise StatusCodeException('Missing metadata attribute name.', 400)
+                        raise StatusCodeException(
+                            'Missing metadata attribute name.', 400)
                     elif 'type' not in attribute:
                         raise StatusCodeException(
                             'Missing "%s" type' % attribute['name'], 400)
@@ -48,28 +49,3 @@ class ItemMetadata(object):
             'created_at': self.created_at,
             'version': self.version
         }
-
-
-"""
-{
-    "type" : "item",
-    "attributes": [
-        {
-            "name": "title",
-            "wheight" : 10,
-            "unique": true,
-            "type" : "string",
-            "max_length": 120,
-            "recommendable": true
-        },
-        {
-            "name": "description",
-            "wheight" : 10,
-            "unique": false,
-            "type": "string",
-            "recommendable": true
-        },
-        //...
-    ]
-}
-"""

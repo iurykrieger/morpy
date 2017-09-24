@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from flask import request, make_response
+from flask import make_response
 from app.common.exceptions import StatusCodeException
 from app.common.auth import auth
 from app.api.recommenders.ContentRecommender import content_recommender

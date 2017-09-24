@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask_restful import Resource
 from flask import request, make_response
-from pymongo import ReturnDocument
 from app.api.services.UserService import UserService
 from app.api.models.UserModel import UserModel
 from app.common.exceptions import StatusCodeException

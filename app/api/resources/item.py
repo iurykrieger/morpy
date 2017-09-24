@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 from flask_restful import Resource
-from flask import request, make_response, jsonify
-from database.db import ObjectIDConverter
+from flask import request, make_response
 from app.api.models.ItemModel import ItemModel
 from app.common.exceptions import StatusCodeException
 from app.common.auth import auth
-from app.api.services.ItemMetadataService import ItemMetadataService
 from app.api.services.ItemService import ItemService
-from app.api.metadata.ItemMetadata import ItemMetadata
 
 
 class Item(Resource):

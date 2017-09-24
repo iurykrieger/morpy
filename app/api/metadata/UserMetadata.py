@@ -17,7 +17,7 @@ class UserMetadata(object):
             if self.type != 'user':
                 raise StatusCodeException('Invalid type', 400)
 
-            if len(self.attributes) > 0:
+            if self.attributes:
                 for attribute in self.attributes:
                     if 'name' not in attribute:
                         raise StatusCodeException('Missing attribute name',

@@ -1,11 +1,8 @@
-from Recommender import Recommender
-from database.db import ObjectIDConverter
 from app.api.models.ItemModel import ItemModel
-from app.common.adapter import to_json
 from app.common.exceptions import StatusCodeException
 from app.api.services.ItemService import ItemService
 
-class ContentRecommender(Recommender):
+class ContentRecommender(object):
     def __init__(self):
         self.item_service = ItemService()
 
