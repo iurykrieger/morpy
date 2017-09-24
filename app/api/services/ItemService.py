@@ -17,3 +17,9 @@ class ItemService(object):
 
     def insert(self, item_dict):
         return  ObjectIDConverter.to_url(self.items.insert(item_dict))
+
+    def update_recommendations(self, item_id, recommendations):
+        self.items.find_one_and_update(
+            {'_id': item_id},
+            {'$set': {'similar': recommendations}}
+        )

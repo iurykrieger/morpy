@@ -55,28 +55,22 @@ class ContentEngine(Engine):
 
     def _train_item(self, item, index):
         similar_indices = self.cosine_similarities[index].argsort()[:-50:-1]
-        similar_items = [(self.cosine_similarities[index][similar_item], self.data['_id'][similar_item])
+        recs = [(self.cosine_similarities[index][similar_item], self.data['_id'][similar_item])
                          for similar_item in similar_indices]
 
         # First item is the item itself, so remove it.
-        similar_items = similar_items[1:]
+        recs = recs[1:]
 
-        similar_items = [{
+        recs = [{
             '_id': item_id,
             'similarity': similarity
-        } for similarity, item_id in similar_items]
+        } for similarity, item_id in recs]
 
-        self._update(item, similar_items)
+        self.item_service.update_recommendations(item, recs)
 
     def _train(self):
         for index, item in self.data.iterrows():
             self._train_item(item, index)
-
-    def _update(self, item, similar):
-        self.items.find_one_and_update(
-            {'_id': item['_id']},
-            {'$set': {'similar': similar}}
-        )
 
     def train(self):
         """
