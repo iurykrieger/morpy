@@ -25,7 +25,7 @@ class Metadata(Resource):
                 new_metadata = ItemMetadata(request.get_json(), version=1, active=True)
             elif meta_type == 'user':
                 collection = self.user_meta
-                new_metadata = UserMetadata(request.get_json())
+                new_metadata = UserMetadata(request.get_json(), version=1, active=True)
             else:
                 raise StatusCodeException('Invalid type', 400)
 
@@ -54,7 +54,8 @@ class Metadata(Resource):
                 new_metadata = ItemMetadata(new_metadata, _get_new_version(collection), True)
             elif meta_type == 'user':
                 collection = self.user_meta
-                new_metadata = UserMetadata(request.get_json())
+                new_metadata = request.get_json()
+                new_metadata = UserMetadata(new_metadata, _get_new_version(collection), True)
             else:
                 raise StatusCodeException('Invalid type', 400)
 
@@ -80,7 +81,7 @@ class MetadataList(Resource):
             if meta_type == 'item':
                 json_metadata = [ItemMetadata(meta).to_json() for meta in self.item_meta.find()]
             elif meta_type == 'user':
-                return {} # XXX - Do User
+                json_metadata = [UserMetadata(meta).to_json() for meta in self.user_meta.find()]
             else:
                 raise StatusCodeException('Invalid type', 400)
 

@@ -9,11 +9,9 @@ from app.api.metadata.ItemMetadata import ItemMetadata
 
 
 class ContentEngine(Engine):
-    def __init__(self):
-        self.db = db.get_db()
-        self.items = self.db.items
-        self.item_meta = ItemMetadata(
-            self.db.item_metadata.find_one({'active': True}))
+    def __init__(self, db):
+        self.items = db.items
+        self.item_meta = ItemMetadata(db.item_metadata.find_one({'active': True}))
         self.data = []
         self.tfidf = TfidfVectorizer(
             analyzer='word',

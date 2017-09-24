@@ -12,7 +12,7 @@ class ContentWorker(object):
         process.start()
 
     def train_item(self, item_id):
-        self._start_process(ContentEngine(db.get_db()).train_item, (item_id, ))
+        self._start_process(ContentEngine().train_item, (item_id, ))
 
     def train(self):
-        self._start_process(ContentEngine(db.get_db()).train, ())
+        self._start_process(ContentEngine().train, ())

@@ -3,7 +3,7 @@ from flask_restful import Resource
 from flask import request, make_response
 from pymongo import ReturnDocument
 from database.db import db
-from app.api.models.user import User as UserModel
+from app.api.models.UserModel import UserModel
 from app.common.exceptions import StatusCodeException
 from app.common.auth import auth
 
@@ -55,12 +55,9 @@ class Users(Resource):
 
     @auth.middleware_auth_token
     def get(self):
-        output = []
-        all_users = self.users.find({'email': {'$exists': True}})
-        for user in all_users:
-            user = UserModel(user)
-            output.append(user.to_json())
-        return make_response({'users': output})
+        all_users = self.users.find()
+        json_users = [UserModel(user).to_json() for user in all_users]
+        return make_response(json_users)
 
     def post(self):
         try:

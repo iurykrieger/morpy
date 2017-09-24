@@ -23,7 +23,7 @@ class ObjectIDConverter(BaseConverter):
 
 
 def get_db():
-    return MongoClient(MONGO_URI, connect=False)[MONGO_DBNAME]
+    return MongoClient(MONGO_URI, connect=False, maxPoolSize=200)[MONGO_DBNAME]
 
 
 db = get_db()
