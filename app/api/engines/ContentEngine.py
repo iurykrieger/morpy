@@ -2,12 +2,9 @@ import pandas as pd
 import time
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
-from sklearn.feature_extraction import DictVectorizer
-from app.common.exceptions import StatusCodeException
 from app.common.logging import info
 from Engine import Engine
 from app.api.metadata.ItemMetadata import ItemMetadata
-import itertools
 
 
 class ContentEngine(Engine):
@@ -24,23 +21,26 @@ class ContentEngine(Engine):
             stop_words='english')
 
     def _get_recommendable_attributes(self):
-        return [attribute['name'] for attribute in self.item_meta.attributes if attribute['recommendable']]
+        return [attribute['name'] for attribute in self.item_meta.attributes
+                if attribute['recommendable'] and attribute['type'] == 'string']
 
     def _get_data_filter(self):
         attributes = self._get_recommendable_attributes()
-        attribute_filter = {'$project': {}}
+        coalesce_attributes = {'$project': {}}
         concat_filter = {'$project': {}}
 
         for attr in attributes:
-            attribute_filter['$project'][attr] = { '$ifNull': ['${name}'.format(name=attr), '']}
-        
-        concat_filter['$project']['concated_attrs'] = {'$concat': ['${name}'.format(name=attr) for attr in attributes]}
-        
-        return [attribute_filter, concat_filter]
+            coalesce_attributes['$project'][attr] = {
+                '$ifNull': ['${name}'.format(name=attr), '']}
+
+        concat_filter['$project']['concated_attrs'] = {
+            '$concat': ['${name}'.format(name=attr) for attr in attributes]}
+
+        return [coalesce_attributes, concat_filter]
 
     def _prepare(self):
-        self.data = pd.DataFrame(list(self.items.aggregate(self._get_data_filter())))
-        print self.data['concated_attrs']
+        self.data = pd.DataFrame(
+            list(self.items.aggregate(self._get_data_filter())))
         self.tfidf_matrix = self.tfidf.fit_transform(
             self.data['concated_attrs'])
         self.cosine_similarities = linear_kernel(
@@ -71,11 +71,10 @@ class ContentEngine(Engine):
             self._train_item(item, index)
 
     def _update(self, item, similar):
-        self.items.find_one_and_update({
-            '_id': item['_id']
-        }, {'$set': {
-            'similar': similar
-        }})
+        self.items.find_one_and_update(
+            {'_id': item['_id']},
+            {'$set': {'similar': similar}}
+        )
 
     def train(self):
         """

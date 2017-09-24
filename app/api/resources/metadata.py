@@ -22,7 +22,7 @@ class Metadata(Resource):
         try:
             if meta_type == 'item':
                 collection = self.item_meta
-                new_metadata = ItemMetadata(request.get_json())
+                new_metadata = ItemMetadata(request.get_json(), version=1, active=True)
             elif meta_type == 'user':
                 collection = self.user_meta
                 new_metadata = UserMetadata(request.get_json())
@@ -38,31 +38,52 @@ class Metadata(Resource):
             return ex.to_response()
 
     @auth.middleware_auth_token
-    def put(self, type):
+    def put(self, meta_type):
+
+        def _get_new_version(collection):
+            old_meta = collection.find_one({'active': True})
+            if old_meta:
+                return old_meta['version'] + 1
+            
+            raise StatusCodeException('No metadata found for item.', 404)
+                
         try:
             if meta_type == 'item':
                 collection = self.item_meta
-                new_metadata = ItemMetadata(request.get_json())
+                new_metadata = request.get_json()
+                new_metadata = ItemMetadata(new_metadata, _get_new_version(collection), True)
             elif meta_type == 'user':
                 collection = self.user_meta
                 new_metadata = UserMetadata(request.get_json())
             else:
                 raise StatusCodeException('Invalid type', 400)
 
-            collection.find_and_update(
-                {
-                    'active': True
-                }, {'$set': {
-                    'active': False
-                }}, {'$inc': {
-                    'version': 1
-                }},
-                return_document=ReturnDocument.AFTER)
+            collection.update({'active': True}, {'$set': {'active': False}})
+            collection.insert(new_metadata.to_database())
+            return make_response(new_metadata.to_json())
 
-            if not collection.find_one({'active': True}):
-                collection.insert(new_metadata.to_database())
-                return make_response(new_metadata.to_json())
+        except StatusCodeException as ex:
+            return ex.to_response()
+
+
+class MetadataList(Resource):
+
+    ENDPOINT = '/metadata/<string:meta_type>/history'
+
+    def __init__(self):
+        self.item_meta = db.item_metadata
+        self.user_meta = db.user_metadata
+
+    @auth.middleware_auth_token
+    def get(self, meta_type):
+        try:
+            if meta_type == 'item':
+                json_metadata = [ItemMetadata(meta).to_json() for meta in self.item_meta.find()]
+            elif meta_type == 'user':
+                return {} # XXX - Do User
             else:
-                raise StatusCodeException('Conflict', 409)
+                raise StatusCodeException('Invalid type', 400)
+
+            return make_response(json_metadata)
         except StatusCodeException as ex:
             return ex.to_response()

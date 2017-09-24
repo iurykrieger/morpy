@@ -6,14 +6,14 @@ TYPE_MAPPING = {'unicode': 'string', 'string': 'string'}
 
 
 class ItemMetadata(object):
-    def __init__(self, metadata):
+    def __init__(self, metadata, version=1, active=False):
         try:
             self.meta = metadata
             self.type = self.meta['type']
             self.attributes = self.meta['attributes']
-            self.active = self.meta['active'] if 'ative' in self.meta else True
-            self.created_at = self.meta['created_at'] if 'created_at' in self.meta else datetime.now(
-            )
+            self.active = self.meta['active'] if 'active' in self.meta else active
+            self.created_at = self.meta['created_at'] if 'created_at' in self.meta else datetime.now()
+            self.version = self.meta['version'] if 'version' in self.meta else version
 
             if self.type != 'item':
                 raise StatusCodeException('Invalid type', 400)
@@ -21,8 +21,7 @@ class ItemMetadata(object):
             if len(self.attributes) > 0:
                 for attribute in self.attributes:
                     if 'name' not in attribute:
-                        raise StatusCodeException('Missing metadata attribute "name"',
-                                                  400)
+                        raise StatusCodeException('Missing metadata attribute name.', 400)
                     elif 'type' not in attribute:
                         raise StatusCodeException(
                             'Missing "%s" type' % attribute['name'], 400)
@@ -38,14 +37,17 @@ class ItemMetadata(object):
             'type': self.type,
             'attributes': self.attributes,
             'active': self.active,
-            'created_at': self.created_at
+            'created_at': self.created_at,
+            'version': self.version
         }
 
     def to_json(self):
         return {
             'type': self.type,
             'attributes': self.attributes,
-            'active': self.active
+            'active': self.active,
+            'created_at': self.created_at,
+            'version': self.version
         }
 
 

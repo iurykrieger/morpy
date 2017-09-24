@@ -8,7 +8,8 @@ class ItemModel(object):
         self.item = item
 
     def _get_existent_attributes(self):
-        return [attr for attr in self.meta.attributes if attr['name'] in self.item]
+        return [attr for attr in self.meta.attributes 
+            if (attr['name'] in self.item) and  ('hide' not in attr)]
 
     def _validate(self):
         for attr in self.meta.attributes:

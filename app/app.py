@@ -7,7 +7,7 @@ from api.resources.token import Token
 from api.resources.recommend import Recommend
 from api.resources.train import TrainItem, Train
 from api.resources.item import Items, Item
-from api.resources.metadata import Metadata
+from api.resources.metadata import Metadata, MetadataList
 
 # Global defines
 app = FlaskAPI(__name__)
@@ -24,6 +24,7 @@ api.add_resource(TrainItem, TrainItem.ENDPOINT, endpoint='train_item')
 api.add_resource(Items, Items.ENDPOINT, endpoint='items')
 api.add_resource(Item, Item.ENDPOINT, endpoint='item')
 api.add_resource(Metadata, Metadata.ENDPOINT, endpoint='metadata')
+api.add_resource(MetadataList, MetadataList.ENDPOINT, endpoint='metadata_list')
 
 @app.route('/', methods=['GET'])
 def root():
