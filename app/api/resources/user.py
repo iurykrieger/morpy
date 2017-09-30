@@ -48,7 +48,7 @@ class User(Resource):
 
 
 class Users(Resource):
-    
+
     ENDPOINT = '/user'
 
     def __init__(self):

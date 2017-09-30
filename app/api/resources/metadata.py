@@ -43,9 +43,9 @@ class Metadata(Resource):
             meta = service.get_active()
             if meta:
                 return meta['version'] + 1
-            
-            raise StatusCodeException('No metadata found for item.', 404)
-                
+
+            raise StatusCodeException('Item metadata not found', 404)
+
         try:
             if meta_type == 'item':
                 service = self.item_meta_service
@@ -57,7 +57,7 @@ class Metadata(Resource):
                 new_metadata = UserMetadata(new_metadata, _get_new_version(service), True)
             else:
                 raise StatusCodeException('Invalid type', 400)
-            
+
             service.disable_all()
             service.insert(new_metadata.to_database())
             return make_response(new_metadata.to_json())
@@ -78,7 +78,7 @@ class MetadataList(Resource):
     def get(self, meta_type):
         try:
             if meta_type == 'item':
-                json_metadata = [ItemMetadata(meta).to_json() 
+                json_metadata = [ItemMetadata(meta).to_json()
                     for meta in self.item_meta_service.get_all()]
             elif meta_type == 'user':
                 json_metadata = [UserMetadata(meta).to_json()

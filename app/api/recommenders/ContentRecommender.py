@@ -29,7 +29,4 @@ class ContentRecommender(object):
                 return json_recs
             return {}
         else:
-            raise StatusCodeException('No item found', 404)
-
-
-content_recommender = ContentRecommender()
+            raise StatusCodeException('Item not found', 404)

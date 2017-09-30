@@ -1,12 +1,10 @@
 from database.db import db, ObjectIDConverter
 from app.api.metadata.ItemMetadata import ItemMetadata
-from app.api.services.ItemMetadataService import ItemMetadataService
 
 class ItemService(object):
 
     def __init__(self):
         self.items = db.items
-        self.meta = ItemMetadata(ItemMetadataService().get_active())
 
     def get_by_id(self, item_id):
         return self.items.find_one({'_id': item_id})

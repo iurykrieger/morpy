@@ -26,7 +26,6 @@ api.add_resource(Item, Item.ENDPOINT, endpoint='item')
 api.add_resource(Metadata, Metadata.ENDPOINT, endpoint='metadata')
 api.add_resource(MetadataList, MetadataList.ENDPOINT, endpoint='metadata_list')
 
-
 @app.route('/', methods=['GET'])
 def root():
     return {'status': 'running'}
