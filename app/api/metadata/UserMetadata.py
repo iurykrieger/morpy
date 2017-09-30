@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-class UserMetadata(object):
-    def __init__(self, metadata):
-        pass
-=======
 from app.common.exceptions import StatusCodeException
 from datetime import datetime
 
@@ -54,4 +49,3 @@ class UserMetadata(object):
             'created_at': self.created_at,
             'version': self.version
         }
->>>>>>> af8dd5f8dd191a6c8ad09a3f2dcc8dbe8453512e

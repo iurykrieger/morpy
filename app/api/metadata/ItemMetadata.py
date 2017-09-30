@@ -1,20 +1,12 @@
 from app.common.exceptions import StatusCodeException
 from datetime import datetime
-<<<<<<< HEAD
-=======
 
 TYPE_MAPPING = {'unicode': 'string', 'string': 'string'}
->>>>>>> af8dd5f8dd191a6c8ad09a3f2dcc8dbe8453512e
 
 
 class ItemMetadata(object):
     def __init__(self, metadata, version=1, active=False):
         try:
-<<<<<<< HEAD
-            self._id = metadata['_id'] if '_id' in metadata else None
-            self.type = metadata['type']
-            self.attributes = metadata['attributes']
-=======
             self.meta = metadata
             self.type = self.meta['type']
             self.attributes = self.meta['attributes']
@@ -35,7 +27,6 @@ class ItemMetadata(object):
                             'Missing "%s" type' % attribute['name'], 400)
             else:
                 raise StatusCodeException('Empty metadata attributes', 400)
->>>>>>> af8dd5f8dd191a6c8ad09a3f2dcc8dbe8453512e
         except StatusCodeException as ex:
             raise ex
         except Exception as ex:
