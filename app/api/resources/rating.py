@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask_restful import Resource
 from flask import request, make_response
-from app.api.services.UserService import UserService
+from app.api.services.RatingService import RatingService
 from app.api.models.UserModel import UserModel
 from app.common.exceptions import StatusCodeException
 from app.common.auth import auth
@@ -12,7 +12,7 @@ class Rating(Resource):
     ENDPOINT = '/rating/<objectid:rating_id>'
 
     def __init__(self):
-        self.service = UserService()
+        self.service = RatingService()
 
     @auth.middleware_auth_token
     def get(self, rating_id):
@@ -52,7 +52,7 @@ class Ratings(Resource):
     ENDPOINT = '/rating'
 
     def __init__(self):
-        self.service = UserService()
+        self.service = RatingService()
 
     @auth.middleware_auth_token
     def get(self):
