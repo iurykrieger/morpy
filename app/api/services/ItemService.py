@@ -14,8 +14,8 @@ class ItemService(object):
     def get_all(self):
         return self.items.find({}, {'similar': 0})
 
-    def get_similar_info(self, similar_list):
-        return self.items.find({'_id': {'$in' : similar_list}}, {'similar': 0})
+    def get_info(self, item_list):
+        return self.items.find({'_id': {'$in' : item_list}}, {'similar': 0})
 
     def insert(self, item_dict):
         return  ObjectIDConverter.to_url(self.items.insert(item_dict))

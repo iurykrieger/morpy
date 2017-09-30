@@ -2,15 +2,18 @@ from flask_restful import Resource
 from flask import make_response
 from app.common.exceptions import StatusCodeException
 from app.common.auth import auth
-from app.api.recommenders.ContentRecommender import ContentRecommender
+from app.api.services.RecommenderService import RecommenderService
 
 class Recommend(Resource):
 
     ENDPOINT = '/recommend/<objectid:item_id>/top/<int:number_of_recommendations>'
 
+    def __init__(self):
+        self.recommender_service = RecommenderService()
+
     @auth.middleware_auth_token
     def get(self, item_id, number_of_recommendations=10):
         try:
-            return make_response(ContentRecommender().recommend(item_id, number_of_recommendations))
+            return make_response(self.recommender_service.recommend(item_id, number_of_recommendations))
         except StatusCodeException as ex:
             return ex.to_response()
