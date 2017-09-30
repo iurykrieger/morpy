@@ -1,12 +1,10 @@
-from Recommender import Recommender
-from database.db import db
-from app.common.adapter import to_json
+from app.api.models.ItemModel import ItemModel
 from app.common.exceptions import StatusCodeException
+from app.api.services.ItemService import ItemService
 
-
-class ContentRecommender(Recommender):
+class ContentRecommender(object):
     def __init__(self):
-        self.items = db.items
+        self.item_service = ItemService()
 
     def recommend(self, item_id, number_of_recommendations=10):
         """
@@ -17,9 +15,19 @@ class ContentRecommender(Recommender):
         :return: A list of lists like: [["19", 0.2203], ["494", 0.1693], ...]. The first item in each sub-list is
         the item ID and the second is the similarity score. Sorted by similarity score, descending.
         """
-        item = self.items.find_one({'_id': item_id})
+        item = self.item_service.get_by_id(item_id)
         if item:
-            return map(to_json, item['similar'][:number_of_recommendations])
+            if 'similar' in item:
+                similar_items = item['similar'][:number_of_recommendations]
+                similar_ids = [it['_id'] for it in item['similar'][:number_of_recommendations]]
+                recommendations = self.item_service.get_similar_info(similar_ids)
+                json_recs = []
+                for rec in recommendations:
+                    for similar_item in similar_items:
+                        if similar_item['_id'] == rec['_id']:
+                            json_recs.append(ItemModel(rec).to_rec_json(similar_item['similarity']))
+                return json_recs
+            return {}
         else:
             raise StatusCodeException('No item found', 404)
 
