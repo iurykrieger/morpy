@@ -6,7 +6,7 @@ from app.common.auth import auth
 
 class Token(Resource):
 
-    ENDPOINT = '/token'
+    ENDPOINT = '/auth/token'
 
     def post(self):
         try:
