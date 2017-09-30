@@ -1,5 +1,6 @@
 from database.db import db
 import pymongo
+from app.api.metadata.ItemMetadata import ItemMetadata
 
 class ItemMetadataService(object):
 

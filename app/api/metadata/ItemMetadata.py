@@ -45,3 +45,7 @@ class ItemMetadata(object):
             'created_at': self.created_at,
             'version': self.version
         }
+
+    def get_recommendable_attributes(self):
+        return [attribute['name'] for attribute in self.attributes
+                if attribute['recommendable'] and attribute['type'] == 'string']

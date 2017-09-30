@@ -16,8 +16,8 @@ class MovieLensItemSeeder(object):
             'title',
             'genres'
         ]
-        items = pd.read_csv('storage/ml-1m/movies.dat', sep=':', names=attrs, encoding='latin1')
-        self.items.insert_many(json.loads(items.to_json(orient='records')))
+        csv_items = pd.read_csv('storage/ml-1m/movies.dat', sep=':', names=attrs, encoding='latin1')
+        self.items.insert_many(json.loads(csv_items.to_json(orient='records')))
 
     def seed_users(self):
         pass
@@ -34,5 +34,5 @@ class MovieLensCSVSeeder(object):
         self.ratings = db.ratings
 
     def seed_items(self):
-        items = pd.read_csv('storage/ml-20m/movies.csv', sep=',', encoding='latin1')
-        self.items.insert_many(json.loads(items.to_json(orient='records')))
+        csv_items = pd.read_csv('storage/ml-20m/movies.csv', sep=',', encoding='latin1')
+        self.items.insert_many(json.loads(csv_items.to_json(orient='records')))

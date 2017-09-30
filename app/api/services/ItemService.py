@@ -1,10 +1,12 @@
 from database.db import db, ObjectIDConverter
 from app.api.metadata.ItemMetadata import ItemMetadata
+from app.api.services.ItemMetadataService import ItemMetadataService
 
 class ItemService(object):
 
     def __init__(self):
         self.items = db.items
+        self.meta = ItemMetadata(ItemMetadataService().get_active())
 
     def get_by_id(self, item_id):
         return self.items.find_one({'_id': item_id})
@@ -27,12 +29,8 @@ class ItemService(object):
             {'$set': {'similar': recommendations}}
         )
 
-    def _get_recommendable_attributes(self):
-        return [attribute['name'] for attribute in self.meta.attributes
-                if attribute['recommendable'] and attribute['type'] == 'string']
-
     def get_rec_data(self):
-        attributes = self._get_recommendable_attributes()
+        attributes = self.meta.get_recommendable_attributes()
         coalesce_attributes = {'$project': {}}
         concat_filter = {'$project': {}}
 
