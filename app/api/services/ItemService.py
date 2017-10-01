@@ -18,7 +18,7 @@ class ItemService(object):
         return self.items.find({'_id': {'$in' : item_list}}, {'similar': 0})
 
     def insert(self, item_dict):
-        return  ObjectIDConverter.to_url(self.items.insert(item_dict))
+        return self.items.insert(item_dict)
 
     def remove(self, item_id):
         return self.items.remove({'_id': item_id})

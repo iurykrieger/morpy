@@ -5,6 +5,7 @@ from app.api.models.ItemModel import ItemModel
 from app.common.exceptions import StatusCodeException
 from app.common.auth import auth
 from app.api.services.ItemService import ItemService
+from app.api.workers.ContentWorker import ContentWorker
 
 
 class Item(Resource):
@@ -55,7 +56,8 @@ class Items(Resource):
             item = request.get_json()
             if '_id' not in item:  # XXX - Compare unique metadata values
                 item['_id'] = self.item_service.insert(item)
-                return make_response(item)
+                ContentWorker().train_item(item['_id'])
+                return make_response(ItemModel(item).to_json())
             else:
                 raise StatusCodeException('Conflict', 409)
         except StatusCodeException as ex:
