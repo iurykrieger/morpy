@@ -1,6 +1,7 @@
 from database.db import db, ObjectIDConverter
 from app.api.metadata.ItemMetadata import ItemMetadata
 from app.api.services.ItemMetadataService import ItemMetadataService
+import pymongo
 
 class ItemService(object):
 

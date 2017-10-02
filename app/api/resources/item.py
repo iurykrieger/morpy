@@ -53,11 +53,12 @@ class Items(Resource):
     @auth.middleware_auth_token
     def post(self):
         try:
-            item = request.get_json()
-            if '_id' not in item:  # XXX - Compare unique metadata values
-                item['_id'] = self.item_service.insert(item)
-                ContentWorker().train_item(item['_id'])
-                return make_response(ItemModel(item).to_json())
+            item = ItemModel(request.get_json())
+            if item.validate():
+                item_id = self.item_service.insert(item.to_database())
+                item.set_id(item_id)
+                ContentWorker().train_item(item_id)
+                return make_response(item.to_json())
             else:
                 raise StatusCodeException('Conflict', 409)
         except StatusCodeException as ex:

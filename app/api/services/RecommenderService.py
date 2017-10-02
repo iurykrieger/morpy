@@ -1,6 +1,7 @@
 from app.api.models.ItemModel import ItemModel
 from app.common.exceptions import StatusCodeException
 from app.api.services.ItemService import ItemService
+import operator
 
 class RecommenderService(object):
     def __init__(self):
@@ -26,6 +27,7 @@ class RecommenderService(object):
                     for similar_item in similar_items:
                         if similar_item['_id'] == rec['_id']:
                             json_recs.append(ItemModel(rec).to_rec_json(similar_item['similarity']))
+                json_recs = sorted(json_recs, cmp=lambda x,y: cmp(x['similarity'], y['similarity']), reverse=True) #Resort by similarity level
                 return json_recs
             return {}
         else:

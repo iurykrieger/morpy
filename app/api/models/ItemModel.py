@@ -1,6 +1,8 @@
 from app.api.metadata.ItemMetadata import ItemMetadata, TYPE_MAPPING
 from app.api.services.ItemMetadataService import ItemMetadataService
 from database.db import ObjectIDConverter
+from app.common.exceptions import StatusCodeException
+
 
 class ItemModel(object):
     def __init__(self, item):
@@ -9,21 +11,31 @@ class ItemModel(object):
         self.item = item
 
     def _get_existent_attributes(self):
-        return [attr for attr in self.meta.attributes
-            if (attr['name'] in self.item) and  ('hide' not in attr)]
+        return [
+            attr for attr in self.meta.attributes
+            if (attr['name'] in self.item) and ('hide' not in attr)
+        ]
 
     def validate(self):
-        for attr in self.meta.attributes:
+        for attr in self.meta.get_nullable_attributes():
             if attr['name'] not in self.item:
-                return False
+                raise StatusCodeException('Missing %s attribute' % attr['name'], 400)
             elif TYPE_MAPPING[type(self.item[attr['name']]).__name__] != attr['type']:
-                return False
+                raise StatusCodeException('%s attribute has wrong type' % attr['name'], 400)
         return True
 
+    def to_database(self):
+        item = {}
+        for attr in self.meta.attributes:
+            if attr['name'] in self.item:
+                item[attr['name']] = self.item[attr['name']]
+        return item
+
+    def set_id(self, item_id):
+        self.item['_id'] = item_id
+
     def to_json(self):
-        json = {
-            '_id': ObjectIDConverter.to_url(self.item['_id'])
-        }
+        json = {'_id': ObjectIDConverter.to_url(self.item['_id'])}
         for attr in self._get_existent_attributes():
             json[attr['name']] = self.item[attr['name']]
         return json
