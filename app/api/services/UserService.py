@@ -36,7 +36,7 @@ class UserService(object):
         )
 
     def insert(self, user_dict):
-        return ObjectIDConverter.to_url(self.users.insert(user_dict))
+        return self.users.insert(user_dict)
 
     def remove(self, user_id):
         return self.users.remove({'_id': user_id})

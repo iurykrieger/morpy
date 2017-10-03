@@ -1,7 +1,8 @@
-from app.api.metadata.ItemMetadata import ItemMetadata, TYPE_MAPPING
+from app.api.metadata.ItemMetadata import ItemMetadata
 from app.api.services.ItemMetadataService import ItemMetadataService
 from database.db import ObjectIDConverter
 from app.common.exceptions import StatusCodeException
+from app.common.mapping import get_synonymous
 
 
 class ItemModel(object):
@@ -17,10 +18,11 @@ class ItemModel(object):
         ]
 
     def validate(self):
-        for attr in self.meta.get_nullable_attributes():
+        for attr in self.meta.attributes:
             if attr['name'] not in self.item:
-                raise StatusCodeException('Missing %s attribute' % attr['name'], 400)
-            elif TYPE_MAPPING[type(self.item[attr['name']]).__name__] != attr['type']:
+                if 'nullable' not in attr or not attr['nullable']:
+                        raise StatusCodeException('Missing %s attribute' % attr['name'], 400)
+            elif get_synonymous(type(self.item[attr['name']]).__name__) != attr['type']:
                 raise StatusCodeException('%s attribute has wrong type' % attr['name'], 400)
         return True
 

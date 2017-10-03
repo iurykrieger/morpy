@@ -34,7 +34,7 @@ class ItemMetadata(object):
             raise StatusCodeException('Missing attributes for item metadata',
                                       400)
 
-    def get_nullable_attributes(self):
+    def get_required_attributes(self):
         return [
             attribute for attribute in self.attributes if 'nullable' not in attribute or not attribute['nullable']
         ]
@@ -42,7 +42,7 @@ class ItemMetadata(object):
     def get_recommendable_attributes(self):
         return [
             attribute['name'] for attribute in self.attributes
-            if attribute['recommendable'] and attribute['type'] == 'string'
+            if 'recommendable' in attribute and attribute['recommendable'] and attribute['type'] == 'string'
         ]
 
     def to_database(self):

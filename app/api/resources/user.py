@@ -26,9 +26,9 @@ class User(Resource):
     @auth.middleware_auth_token
     def put(self, user_id):
         try:
-            user = self.service.update(user_id, request.get_json())
-            if user:
-                user = UserModel(user)
+            user = UserModel(request.get_json())
+            if user.validate():
+                user = UserModel(self.service.update(user_id, user.to_database()))
                 return make_response(user.to_json())
             else:
                 raise StatusCodeException('User not found', 404)
@@ -62,10 +62,11 @@ class Users(Resource):
 
     def post(self):
         try:
-            user = request.get_json()
-            if not False:
-                user['_id'] = self.service.insert(user)
-                return make_response(user)
+            user = UserModel(request.get_json())
+            if user.validate():
+                user_id = self.service.insert(user.to_database())
+                user.set_id(user_id) # XXX - Generate user recommendations
+                return make_response(user.to_json())
             else:
                 raise StatusCodeException('Conflict', 409)
         except StatusCodeException as ex:
