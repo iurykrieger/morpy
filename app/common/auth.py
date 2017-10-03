@@ -49,6 +49,8 @@ class Auth(object):
                 return function(*args, **kwargs)
             except StatusCodeException as ex:
                 return ex.to_response()
+            except Exception as ex:
+                return StatusCodeException(ex.message, 500).to_response()
 
         return decorated_function
 

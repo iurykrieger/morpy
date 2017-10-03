@@ -19,3 +19,5 @@ class Token(Resource):
                 raise StatusCodeException('Invalid parameters', 400)
         except StatusCodeException as ex:
             return ex.to_response()
+        except Exception as ex:
+            return StatusCodeException(ex.message, 500).to_response()

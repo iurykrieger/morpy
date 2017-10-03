@@ -17,6 +17,8 @@ class TrainItem(Resource):
             return make_response() # XXX - Separar content worker do prepare pra validar
         except StatusCodeException as ex:
             return ex.to_response()
+        except Exception as ex:
+            return StatusCodeException(ex.message, 500).to_response()
 
 
 class Train(Resource):
@@ -30,3 +32,5 @@ class Train(Resource):
             return make_response()
         except StatusCodeException as ex:
             return ex.to_response()
+        except Exception as ex:
+            return StatusCodeException(ex.message, 500).to_response()

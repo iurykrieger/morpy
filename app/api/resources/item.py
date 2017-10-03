@@ -25,6 +25,8 @@ class Item(Resource):
                 raise StatusCodeException('Item not found', 404)
         except StatusCodeException as ex:
             return ex.to_response()
+        except Exception as ex:
+            return StatusCodeException(ex.message, 500).to_response()
 
     @auth.middleware_auth_token
     def delete(self, item_id):
@@ -36,6 +38,8 @@ class Item(Resource):
                 raise StatusCodeException('Item not found', 404)
         except StatusCodeException as ex:
             return ex.to_response()
+        except Exception as ex:
+            return StatusCodeException(ex.message, 500).to_response()
 
 
 class Items(Resource):
@@ -63,3 +67,5 @@ class Items(Resource):
                 raise StatusCodeException('Conflict', 409)
         except StatusCodeException as ex:
             return ex.to_response()
+        except Exception as ex:
+            return StatusCodeException(ex.message, 500).to_response()

@@ -22,6 +22,8 @@ class User(Resource):
             return make_response(user.to_json())
         except StatusCodeException as ex:
             return ex.to_response()
+        except Exception as ex:
+            return StatusCodeException(ex.message, 500).to_response()
 
     @auth.middleware_auth_token
     def put(self, user_id):
@@ -34,6 +36,8 @@ class User(Resource):
                 raise StatusCodeException('User not found', 404)
         except StatusCodeException as ex:
             return ex.to_response()
+        except Exception as ex:
+            return StatusCodeException(ex.message, 500).to_response()
 
     @auth.middleware_auth_token
     def delete(self, user_id):
@@ -45,6 +49,8 @@ class User(Resource):
                 raise StatusCodeException('User not found', 404)
         except StatusCodeException as ex:
             return ex.to_response()
+        except Exception as ex:
+            return StatusCodeException(ex.message, 500).to_response()
 
 
 class Users(Resource):
@@ -71,3 +77,5 @@ class Users(Resource):
                 raise StatusCodeException('Conflict', 409)
         except StatusCodeException as ex:
             return ex.to_response()
+        except Exception as ex:
+            return StatusCodeException(ex.message, 500).to_response()

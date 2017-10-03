@@ -35,6 +35,8 @@ class Metadata(Resource):
                 raise StatusCodeException('Conflict', 409)
         except StatusCodeException as ex:
             return ex.to_response()
+        except Exception as ex:
+            return StatusCodeException(ex.message, 500).to_response()
 
     @auth.middleware_auth_token
     def put(self, meta_type):
@@ -64,6 +66,8 @@ class Metadata(Resource):
 
         except StatusCodeException as ex:
             return ex.to_response()
+        except Exception as ex:
+            return StatusCodeException(ex.message, 500).to_response()
 
 
 class MetadataList(Resource):
@@ -89,3 +93,5 @@ class MetadataList(Resource):
             return make_response(json_metadata)
         except StatusCodeException as ex:
             return ex.to_response()
+        except Exception as ex:
+            return StatusCodeException(ex.message, 500).to_response()

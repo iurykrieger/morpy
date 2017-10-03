@@ -17,3 +17,5 @@ class Recommend(Resource):
             return make_response(self.recommender_service.recommend(item_id, number_of_recommendations))
         except StatusCodeException as ex:
             return ex.to_response()
+        except Exception as ex:
+            return StatusCodeException(ex.message, 500).to_response()

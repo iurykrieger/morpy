@@ -22,6 +22,8 @@ class Rating(Resource):
             return make_response(rating.to_json())
         except StatusCodeException as ex:
             return ex.to_response()
+        except Exception as ex:
+            return StatusCodeException(ex.message, 500).to_response()
 
     @auth.middleware_auth_token
     def put(self, rating_id):
@@ -34,6 +36,8 @@ class Rating(Resource):
                 raise StatusCodeException('Rating not found', 404)
         except StatusCodeException as ex:
             return ex.to_response()
+        except Exception as ex:
+            return StatusCodeException(ex.message, 500).to_response()
 
     @auth.middleware_auth_token
     def delete(self, rating_id):
@@ -45,6 +49,8 @@ class Rating(Resource):
                 raise StatusCodeException('Rating not found', 404)
         except StatusCodeException as ex:
             return ex.to_response()
+        except Exception as ex:
+            return StatusCodeException(ex.message, 500).to_response()
 
 
 class Ratings(Resource):
@@ -70,3 +76,5 @@ class Ratings(Resource):
                 raise StatusCodeException('Conflict', 409)
         except StatusCodeException as ex:
             return ex.to_response()
+        except Exception as ex:
+            return StatusCodeException(ex.message, 500).to_response()
