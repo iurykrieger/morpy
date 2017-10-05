@@ -7,6 +7,8 @@
 
 ## Dependencies
 
+MORPY depends on CONDA package interface. You need to install it before the hands on below. See more at [Conda documentation](https://conda.io/docs/).
+
 All MORPY dependencies can be found at the given files:
 -  **conda-requirements.txt**
     - All **conda** dependencies with name, version and python version

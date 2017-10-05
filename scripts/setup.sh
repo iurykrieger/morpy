@@ -25,10 +25,6 @@ sudo apt-get install python-pip
 
 # Creates 'morpy' venv and install all it's requirements
 printf "${GREEN}\n# Creating and configuring conda virtual envroinment...\n${NC}"
-wget -O miniconda.sh https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh
-sudo chmod 777 miniconda.sh
-./miniconda.sh
-rm miniconda.sh
 conda env remove -n morpy -y
 conda create -n morpy -y --file conda-requirements.txt
 source activate morpy
