@@ -43,9 +43,10 @@ class Auth(object):
         @wraps(function)
         def decorated_function(*args, **kwargs):
             try:
-                token = request.headers.get('token', None)
-                if not token or not self.authenticate(token):
-                    raise StatusCodeException('Not authorized', 403)
+                # XXX - Reenable token when finish
+                #token = request.headers.get('token', None)
+                #if not token or not self.authenticate(token):
+                #    raise StatusCodeException('Not authorized', 403)
                 return function(*args, **kwargs)
             except StatusCodeException as ex:
                 return ex.to_response()
