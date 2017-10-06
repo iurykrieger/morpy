@@ -2,35 +2,30 @@ from app.common.exceptions import StatusCodeException
 from datetime import datetime
 
 
-class ItemMetadata(object):
+class RatingMetadata(object):
     def __init__(self, metadata, version=1, active=False):
         if not metadata:
-            raise StatusCodeException('Item metadata not found', 404)
+            raise StatusCodeException('Rating metadata not found', 404)
 
         self.meta = metadata
         self.type = self.meta['type']
         self.attributes = self.meta['attributes']
         self.active = self.meta['active'] if 'active' in self.meta else active
-        self.created_at = self.meta[
-            'created_at'] if 'created_at' in self.meta else datetime.now()
-        self.version = self.meta[
-            'version'] if 'version' in self.meta else version
+        self.created_at = self.meta['created_at'] if 'created_at' in self.meta else datetime.now()
+        self.version = self.meta['version'] if 'version' in self.meta else version
 
-        if self.type != 'item':
+        if self.type != 'rating':
             raise StatusCodeException('Invalid type', 400)
 
         if self.attributes:
             for attribute in self.attributes:
                 if 'name' not in attribute:
-                    raise StatusCodeException(
-                        'Missing name attribute at item metadata', 400)
+                    raise StatusCodeException('Missing name attribute at item metadata', 400)
                 elif 'type' not in attribute:
-                    raise StatusCodeException(
-                        'Missing type for "%s" at item metadata' %
+                    raise StatusCodeException('Missing type for "%s" at item metadata' %
                         attribute['name'], 400)
         else:
-            raise StatusCodeException('Missing attributes for item metadata',
-                                      400)
+            raise StatusCodeException('Missing attributes for item metadata', 400)
 
     def get_required_attributes(self):
         return [

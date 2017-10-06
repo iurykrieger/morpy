@@ -2,7 +2,7 @@
 from flask_restful import Resource
 from flask import request, make_response
 from app.api.services.RatingService import RatingService
-from app.api.models.UserModel import UserModel
+from app.api.models.RatingModel import RatingModel
 from app.common.exceptions import StatusCodeException
 from app.common.auth import auth
 
@@ -18,7 +18,7 @@ class Rating(Resource):
     def get(self, rating_id):
         try:
             rating = self.service.get_by_id(rating_id)
-            rating = UserModel(rating)
+            rating = RatingModel(rating)
             return make_response(rating.to_json())
         except StatusCodeException as ex:
             return ex.to_response()
@@ -30,7 +30,7 @@ class Rating(Resource):
         try:
             rating = self.service.update(rating_id, request.get_json())
             if rating:
-                rating = UserModel(rating)
+                rating = RatingModel(rating)
                 return make_response(rating.to_json())
             else:
                 raise StatusCodeException('Rating not found', 404)
@@ -63,7 +63,7 @@ class Ratings(Resource):
     @auth.middleware_auth_token
     def get(self):
         all_ratings = self.service.get_all()
-        json_ratins = [UserModel(rating).to_json() for rating in all_ratings]
+        json_ratins = [RatingModel(rating).to_json() for rating in all_ratings]
         return make_response(json_ratins)
 
     def post(self):
