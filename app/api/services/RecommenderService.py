@@ -7,7 +7,7 @@ class RecommenderService(object):
     def __init__(self):
         self.item_service = ItemService()
 
-    def recommend(self, item_id, number_of_recommendations=10):
+    def recommend(self, item_id, start=0, end=10):
         """
         Couldn't be simpler! Just retrieves the similar items and their 'score' from redis.
 
@@ -19,8 +19,8 @@ class RecommenderService(object):
         item = self.item_service.get_by_id(item_id)
         if item:
             if 'similar' in item:
-                similar_items = item['similar'][:number_of_recommendations]
-                similar_ids = [it['_id'] for it in item['similar'][:number_of_recommendations]]
+                similar_items = item['similar'][start:end]
+                similar_ids = [it['_id'] for it in item['similar'][start:end]]
                 recommendations = self.item_service.get_info(similar_ids)
                 json_recs = []
                 for rec in recommendations:
@@ -31,4 +31,4 @@ class RecommenderService(object):
                 return json_recs
             return {}
         else:
-            raise StatusCodeException('Item not found', 404)
+            raise StatusCodeException('Item not found', 404)        
