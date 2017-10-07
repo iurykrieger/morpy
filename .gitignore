@@ -65,3 +65,5 @@ storage
 
 # Envroinment files
 .env
+
+docs/build
