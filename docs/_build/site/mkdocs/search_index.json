@@ -1,0 +1,34 @@
+{
+    "docs": [
+        {
+            "location": "/", 
+            "text": "MORPY\n\n\n\n\nMetadata\n\n\nOriented\n\n\nRecommendations for\n\n\nPYthon\n\n\n\n\nDependencies\n\n\nMORPY depends on CONDA package interface. You need to install it before the hands on below. See more at \nConda documentation\n.\n\n\nAll MORPY dependencies can be found at the given files:\n-  \nconda-requirements.txt\n\n    - All \nconda\n dependencies with name, version and python version\n- \nrequirements.txt\n\n    - All other dependencies that can't be installed by conda.\n\n\nIn case of adding a new dependency, run the \nupdate_dependencies.sh\n file at scripts folder.\n\n\n./scripts/update_dependencies.sh\n\n\n\nInstalation\n\n\nIts very simple! Just execute the \nsetup.sh\n script at scripts folder.\n\n\n./scripts/setup.sh\n\n\n\nUsage\n\n\nTo ensure that MORPY will be executed at the created virtual envroinment, just execute the \nstart.sh\n script at scripts folder.\n\n\n./scripts/start.sh", 
+            "title": "Home"
+        }, 
+        {
+            "location": "/#morpy", 
+            "text": "Metadata  Oriented  Recommendations for  PYthon", 
+            "title": "MORPY"
+        }, 
+        {
+            "location": "/#dependencies", 
+            "text": "MORPY depends on CONDA package interface. You need to install it before the hands on below. See more at  Conda documentation .  All MORPY dependencies can be found at the given files:\n-   conda-requirements.txt \n    - All  conda  dependencies with name, version and python version\n-  requirements.txt \n    - All other dependencies that can't be installed by conda.  In case of adding a new dependency, run the  update_dependencies.sh  file at scripts folder.  ./scripts/update_dependencies.sh", 
+            "title": "Dependencies"
+        }, 
+        {
+            "location": "/#instalation", 
+            "text": "Its very simple! Just execute the  setup.sh  script at scripts folder.  ./scripts/setup.sh", 
+            "title": "Instalation"
+        }, 
+        {
+            "location": "/#usage", 
+            "text": "To ensure that MORPY will be executed at the created virtual envroinment, just execute the  start.sh  script at scripts folder.  ./scripts/start.sh", 
+            "title": "Usage"
+        }, 
+        {
+            "location": "/app/api/", 
+            "text": "app.api.resources\n\n\n\napp.api.models\n\n\n\napp.api.engines", 
+            "title": "API"
+        }
+    ]
+}
