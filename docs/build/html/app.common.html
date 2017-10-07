@@ -1,0 +1,305 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>app.common package &mdash; MORPY 0.0.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="MORPY 0.0.4 documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> MORPY
+          
+
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">app.common package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-app.common.auth">app.common.auth module</a></li>
+<li><a class="reference internal" href="#module-app.common.exceptions">app.common.exceptions module</a></li>
+<li><a class="reference internal" href="#module-app.common.logging">app.common.logging module</a></li>
+<li><a class="reference internal" href="#module-app.common.mapping">app.common.mapping module</a></li>
+<li><a class="reference internal" href="#module-app.common.process">app.common.process module</a></li>
+<li><a class="reference internal" href="#module-app.common">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MORPY</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>app.common package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/app.common.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="app-common-package">
+<h1>app.common package<a class="headerlink" href="#app-common-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-app.common.auth">
+<span id="app-common-auth-module"></span><h2>app.common.auth module<a class="headerlink" href="#module-app.common.auth" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="app.common.auth.Auth">
+<em class="property">class </em><code class="descclassname">app.common.auth.</code><code class="descname">Auth</code><span class="sig-paren">(</span><em>secret_key</em><span class="sig-paren">)</span><a class="headerlink" href="#app.common.auth.Auth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="app.common.auth.Auth.authenticate">
+<code class="descname">authenticate</code><span class="sig-paren">(</span><em>token</em><span class="sig-paren">)</span><a class="headerlink" href="#app.common.auth.Auth.authenticate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.common.auth.Auth.generate_token">
+<code class="descname">generate_token</code><span class="sig-paren">(</span><em>email</em>, <em>password</em>, <em>expiration=1296000</em><span class="sig-paren">)</span><a class="headerlink" href="#app.common.auth.Auth.generate_token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.common.auth.Auth.middleware_auth_token">
+<code class="descname">middleware_auth_token</code><span class="sig-paren">(</span><em>function</em><span class="sig-paren">)</span><a class="headerlink" href="#app.common.auth.Auth.middleware_auth_token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-app.common.exceptions">
+<span id="app-common-exceptions-module"></span><h2>app.common.exceptions module<a class="headerlink" href="#module-app.common.exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="app.common.exceptions.StatusCodeException">
+<em class="property">exception </em><code class="descclassname">app.common.exceptions.</code><code class="descname">StatusCodeException</code><span class="sig-paren">(</span><em>message</em>, <em>status_code=None</em><span class="sig-paren">)</span><a class="headerlink" href="#app.common.exceptions.StatusCodeException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></code></p>
+<dl class="method">
+<dt id="app.common.exceptions.StatusCodeException.to_response">
+<code class="descname">to_response</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.common.exceptions.StatusCodeException.to_response" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-app.common.logging">
+<span id="app-common-logging-module"></span><h2>app.common.logging module<a class="headerlink" href="#module-app.common.logging" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="app.common.logging.info">
+<code class="descclassname">app.common.logging.</code><code class="descname">info</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#app.common.logging.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-app.common.mapping">
+<span id="app-common-mapping-module"></span><h2>app.common.mapping module<a class="headerlink" href="#module-app.common.mapping" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="app.common.mapping.get_synonymous">
+<code class="descclassname">app.common.mapping.</code><code class="descname">get_synonymous</code><span class="sig-paren">(</span><em>term</em><span class="sig-paren">)</span><a class="headerlink" href="#app.common.mapping.get_synonymous" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-app.common.process">
+<span id="app-common-process-module"></span><h2>app.common.process module<a class="headerlink" href="#module-app.common.process" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="app.common.process.AbstractProcess">
+<em class="property">class </em><code class="descclassname">app.common.process.</code><code class="descname">AbstractProcess</code><a class="headerlink" href="#app.common.process.AbstractProcess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="app.common.process.AbstractProcess.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.common.process.AbstractProcess.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.common.process.AbstractProcess.start">
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.common.process.AbstractProcess.start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-app.common">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-app.common" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Iury Krieger.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.4',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,3 +1,11 @@
+"""
+.. module:: project_documentation
+    :platform: OS X
+    :synopsis: module illustrating how to document python source code
+ 
+.. moduleauthor:: Patrick Kennedy <patkennedy79@gmail.com>
+"""
+
 import pandas as pd
 import time
 from sklearn.feature_extraction.text import TfidfVectorizer
