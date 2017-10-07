@@ -88,7 +88,8 @@ class ContentEngine(object):
         Iterate through each item's similar items and store the 50 most-similar.
         Similarities and their scores are stored in database as a sorted set, with one set for each item.
 
-        :return: None
+        Returns:
+            None
         """
         start = time.time()
         for index, item in self.data.iterrows():
@@ -106,7 +107,12 @@ class ContentEngine(object):
         Iterate through each item's similar items and store the 50 most-similar.
         Similarities and their scores are stored in database as a sorted set of the item.
 
-        :return: None
+        Args:
+            item_id (objectId): The item id from training.
+
+        Returns:
+            None
+        
         """
         start = time.time()
         item, index = self._get_item_index(item_id)
