@@ -6,17 +6,19 @@
 Welcome to MORPY's documentation!
 =================================
 
-.. toctree::
-   :maxdepth: 3
-   
-   app
-
 Indices and tables
 ==================
 
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+Modules Tree
+==================
+.. toctree::
+   :maxdepth: 3
+   
+   app
 
 .. highlight:: rst
 

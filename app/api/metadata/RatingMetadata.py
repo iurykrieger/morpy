@@ -3,6 +3,19 @@ from datetime import datetime
 
 
 class RatingMetadata(object):
+    """
+    This class creates and validates a given rating metadata dict to store it
+    as internal attributes.
+
+    Args:
+        - metadata (dict): An rating metadata dict representation.
+        - version (int): The current version of rating metadata representation.
+        - active (boolean): A boolean to tell if the given dict is the current active in database.
+
+    Returns:
+        - None
+    """
+    
     def __init__(self, metadata, version=1, active=False):
         if not metadata:
             raise StatusCodeException('Rating metadata not found', 404)
@@ -28,17 +41,43 @@ class RatingMetadata(object):
             raise StatusCodeException('Missing attributes for item metadata', 400)
 
     def get_required_attributes(self):
+        """
+        Return all item metadata required attributes.
+
+        It iterates over the metadata attributes finding all required ones. 
+        
+        Returns:
+            An array with all rating required attributes
+        
+        """
         return [
             attribute for attribute in self.attributes if 'nullable' not in attribute or not attribute['nullable']
         ]
 
     def get_recommendable_attributes(self):
+        """
+        Return all rating metadata recommendable attributes.
+
+        It iterates over the metadata attributes finding all recommendable ones. 
+        
+        Returns:
+            An array with all rating recommendable attributes
+        
+        """
         return [
             attribute['name'] for attribute in self.attributes
             if 'recommendable' in attribute and attribute['recommendable'] and attribute['type'] == 'string'
         ]
 
     def to_database(self):
+        """
+        Builds a BSON representation of the metadata to be stored in mongoDB database.
+        
+        It uses Metadata class attributes to buil a BSON object.
+
+        Returns:
+            A BSON dict to be stored.
+        """
         return {
             'type': self.type,
             'attributes': self.attributes,
@@ -48,6 +87,14 @@ class RatingMetadata(object):
         }
 
     def to_json(self):
+        """
+        Builds a JSON representation of the metadata to be returned as API output to user.
+        
+        It uses Metadata class attributes to build a JSON object.
+
+        Returns:
+            A JSON dict to be returned as API output.
+        """
         return {
             'type': self.type,
             'attributes': self.attributes,
