@@ -4,6 +4,7 @@ from flask import make_response
 from app.common.exceptions import StatusCodeException
 from app.common.auth import auth
 from app.api.workers.ContentWorker import ContentWorker
+from app.api.workers.CollaborativeWorker import CollaborativeWorker
 
 
 class TrainItem(Resource):
@@ -28,7 +29,8 @@ class Train(Resource):
     @auth.middleware_auth_token
     def get(self):
         try:
-            ContentWorker().train()
+            #ContentWorker().train()
+            CollaborativeWorker().train()
             return make_response()
         except StatusCodeException as ex:
             return ex.to_response()
