@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-
-This module leads to be the core of content recommendation and training at this API.
-It uses cosine similarity to train the entire database or even a single item.
-
-"""
-
 import pandas as pd
 import time
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -15,6 +8,16 @@ from app.api.services.ItemService import ItemService
 
 
 class ContentEngine(object):
+    """
+    This class creates the tfidf engine that will train item recommendations
+    based on it's content.
+
+    It creates a pandas dataframe containing all recommendable string data.
+    Based on the created dataframe, a tfidf matrix will de made. After all,
+    the cosine similarity array will be generated using the distance between axis
+    in the tfidf matrix.
+    """
+
     def __init__(self):
         start = time.time()
         self.item_service = ItemService()
@@ -85,7 +88,7 @@ class ContentEngine(object):
 
         Returns:
             None
-        
+
         """
         start = time.time()
         item, index = self._get_item_index(item_id)

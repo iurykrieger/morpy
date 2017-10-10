@@ -11,11 +11,8 @@ class UserMetadata(object):
         - metadata (dict): An user metadata dict representation.
         - version (int): The current version of user metadata representation.
         - active (boolean): A boolean to tell if the given dict is the current active in database.
-
-    Returns:
-        - None
     """
-    
+
     def __init__(self, metadata, version=1, active=False):
         if not metadata:
             raise StatusCodeException('User metadata not found', 404)
@@ -44,11 +41,11 @@ class UserMetadata(object):
         """
         Return all user metadata required attributes.
 
-        It iterates over the metadata attributes finding all required ones. 
-        
+        It iterates over the metadata attributes finding all required ones.
+
         Returns:
             An array with all user required attributes
-        
+
         """
         return [
             attribute for attribute in self.attributes
@@ -59,11 +56,11 @@ class UserMetadata(object):
         """
         Return all user metadata recommendable attributes.
 
-        It iterates over the metadata attributes finding all recommendable ones. 
-        
+        It iterates over the metadata attributes finding all recommendable ones.
+
         Returns:
             An array with all user recommendable attributes
-        
+
         """
         return [
             attribute['name'] for attribute in self.attributes
@@ -73,7 +70,7 @@ class UserMetadata(object):
     def to_database(self):
         """
         Builds a BSON representation of the metadata to be stored in mongoDB database.
-        
+
         It uses Metadata class attributes to buil a BSON object.
 
         Returns:
@@ -90,7 +87,7 @@ class UserMetadata(object):
     def to_json(self):
         """
         Builds a JSON representation of the metadata to be returned as API output to user.
-        
+
         It uses Metadata class attributes to build a JSON object.
 
         Returns:

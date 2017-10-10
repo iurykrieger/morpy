@@ -11,11 +11,8 @@ class ItemMetadata(object):
         - metadata (dict): An item metadata dict representation.
         - version (int): The current version of item metadata representation.
         - active (boolean): A boolean to tell if the given dict is the current active in database.
-
-    Returns:
-        - None
     """
-    
+
     def __init__(self, metadata, version=1, active=False):
         if not metadata:
             raise StatusCodeException('Item metadata not found', 404)
@@ -50,10 +47,9 @@ class ItemMetadata(object):
         Return all item metadata required attributes.
 
         It iterates over the metadata attributes finding all required ones. 
-        
+
         Returns:
             An array with all item required attributes
-        
         """
         return [
             attribute for attribute in self.attributes if 'nullable' not in attribute or not attribute['nullable']
@@ -64,10 +60,9 @@ class ItemMetadata(object):
         Return all item metadata recommendable attributes.
 
         It iterates over the metadata attributes finding all recommendable ones. 
-        
+
         Returns:
             An array with all item recommendable attributes
-        
         """
         return [
             attribute['name'] for attribute in self.attributes
@@ -77,7 +72,7 @@ class ItemMetadata(object):
     def to_database(self):
         """
         Builds a BSON representation of the metadata to be stored in mongoDB database.
-        
+
         It uses Metadata class attributes to buil a BSON object.
 
         Returns:
@@ -94,7 +89,7 @@ class ItemMetadata(object):
     def to_json(self):
         """
         Builds a JSON representation of the metadata to be returned as API output to user.
-        
+
         It uses Metadata class attributes to build a JSON object.
 
         Returns:
