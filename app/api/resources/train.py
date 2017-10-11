@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import traceback
+from app.common.logging import info
 from flask_restful import Resource
 from flask import make_response
 from app.common.exceptions import StatusCodeException
@@ -35,4 +37,5 @@ class Train(Resource):
         except StatusCodeException as ex:
             return ex.to_response()
         except Exception as ex:
+            info(traceback.print_exc())
             return StatusCodeException(ex.message, 500).to_response()

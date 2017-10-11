@@ -6,3 +6,4 @@ flask-restful==0.3.6
 python-bsonjs==0.2.0
 sphinx
 sphinx_rtd_theme
+surprise==1.0.4

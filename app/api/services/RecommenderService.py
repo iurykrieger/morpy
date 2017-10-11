@@ -1,11 +1,13 @@
 from app.api.models.ItemModel import ItemModel
 from app.common.exceptions import StatusCodeException
 from app.api.services.ItemService import ItemService
+from app.api.services.RatingService import RatingService
 import operator
 
 class RecommenderService(object):
     def __init__(self):
         self.item_service = ItemService()
+        self.ratings = RatingService()
 
     def recommend(self, item_id, start=0, end=10):
         """
@@ -31,4 +33,27 @@ class RecommenderService(object):
                 return json_recs
             return {}
         else:
-            raise StatusCodeException('Item not found', 404)        
+            raise StatusCodeException('Item not found', 404)
+
+    def get_shared_preferences(self, user_A, user_B):
+        """
+        Returns the intersection of ratings for two users
+        """
+        ratings = self.ratings.get_all()
+        if user_A not in ratings:
+            raise KeyError("Couldn't find user '%s' in data" % user_A)
+        if user_B not in ratings:
+            raise KeyError("Couldn't find user '%s' in data" % user_B)
+
+        moviesA = set(ratings[user_A].keys())
+        moviesB = set(ratings[user_B].keys())
+        shared = moviesA & moviesB # Intersection operator
+
+        # Create a reviews dictionary to return
+        shared_prefs = {}
+        for item_id in shared:
+            shared_prefs[item_id] = (
+                ratings[user_A][item_id]['rating'],
+                ratings[user_B][item_id]['rating'],
+            )
+        return shared_prefs
