@@ -31,8 +31,8 @@ class Train(Resource):
     @auth.middleware_auth_token
     def get(self):
         try:
-            #ContentWorker().train()
-            CollaborativeWorker().train()
+            ContentWorker().train()
+            #CollaborativeWorker().train()
             return make_response()
         except StatusCodeException as ex:
             return ex.to_response()

@@ -3,6 +3,11 @@
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
 
+sudo apt-get purge mongodb-org*
+sudo apt-get autoremove
+sudo rm -r /var/log/mongodb
+sudo rm -r /var/lib/mongodb
+
 # Configure env
 printf "${GREEN}\n# Configuring envorinment...\n${NC}"
 cp .env.example .env
@@ -10,9 +15,10 @@ cp .env.example .env
 # Install mongodb
 printf "${GREEN}\n# Installing mongodb...\n${NC}"
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6
-echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.4.list
+echo "deb [ arch=amd64,arm64 ] http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.4.list
 sudo apt-get update
 sudo apt-get install -y mongodb-org
+sudo service mongod start
 
 # Creates mongo database folder
 printf "${GREEN}\n# Configuring mongodb data folder...\n${NC}"
